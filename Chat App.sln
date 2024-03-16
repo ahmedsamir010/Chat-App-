@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.API", "Chat.API\Chat.API.csproj", "{CD63148B-2D03-4669-889E-C7BA9C6ED831}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Infrastructe", "Chat.Infrastructe\Chat.Infrastructe.csproj", "{B1478ADE-73D2-409D-B08B-F192AE848486}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Domain", "Chat.Domain\Chat.Domain.csproj", "{D5376BA4-74E5-4823-B442-6478452CD543}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Application", "Chat.Application\Chat.Application.csproj", "{8931E922-FA8D-4BDD-B9A1-92B8AA46B0FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{47F82C0D-DE23-4E34-BA39-2B18F8CBB462}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{3CC18BE7-7474-4FFF-A38E-389DFEA8074B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructre", "Infrastructre", "{553F8377-C43B-41B5-8319-AA0236BBF013}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{CA27F031-597A-4F1A-B7B4-72103291D88E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD63148B-2D03-4669-889E-C7BA9C6ED831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD63148B-2D03-4669-889E-C7BA9C6ED831}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD63148B-2D03-4669-889E-C7BA9C6ED831}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD63148B-2D03-4669-889E-C7BA9C6ED831}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1478ADE-73D2-409D-B08B-F192AE848486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1478ADE-73D2-409D-B08B-F192AE848486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1478ADE-73D2-409D-B08B-F192AE848486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1478ADE-73D2-409D-B08B-F192AE848486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5376BA4-74E5-4823-B442-6478452CD543}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5376BA4-74E5-4823-B442-6478452CD543}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5376BA4-74E5-4823-B442-6478452CD543}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5376BA4-74E5-4823-B442-6478452CD543}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8931E922-FA8D-4BDD-B9A1-92B8AA46B0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8931E922-FA8D-4BDD-B9A1-92B8AA46B0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8931E922-FA8D-4BDD-B9A1-92B8AA46B0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8931E922-FA8D-4BDD-B9A1-92B8AA46B0FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CD63148B-2D03-4669-889E-C7BA9C6ED831} = {3CC18BE7-7474-4FFF-A38E-389DFEA8074B}
+		{B1478ADE-73D2-409D-B08B-F192AE848486} = {553F8377-C43B-41B5-8319-AA0236BBF013}
+		{D5376BA4-74E5-4823-B442-6478452CD543} = {47F82C0D-DE23-4E34-BA39-2B18F8CBB462}
+		{8931E922-FA8D-4BDD-B9A1-92B8AA46B0FD} = {47F82C0D-DE23-4E34-BA39-2B18F8CBB462}
+		{47F82C0D-DE23-4E34-BA39-2B18F8CBB462} = {CA27F031-597A-4F1A-B7B4-72103291D88E}
+		{3CC18BE7-7474-4FFF-A38E-389DFEA8074B} = {CA27F031-597A-4F1A-B7B4-72103291D88E}
+		{553F8377-C43B-41B5-8319-AA0236BBF013} = {CA27F031-597A-4F1A-B7B4-72103291D88E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8ED3AD7-A614-4CE8-800C-760AFB8D3468}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Chat.API</name>
+    </assembly>
+    <members>
+        <member name="M:Chat.API.Controllers.AccountsController.Register(Chat.Application.Features.Accounts.Command.Register.RegisterDto)">
+            <summary>
+            Register a new user.
+            </summary>
+            <param name="registerDto">Registration details.</param>
+            <returns>An ActionResult representing the result of the registration.</returns>
+            <remarks>
+            Roles:[1=Admin,2=Member,3=User]
+            //baseUrl+/api/Register
+            </remarks> 
+        </member>
+        <member name="M:Chat.API.Controllers.MessageController.GetMessages(Chat.Application.Helpers.PaginationsMessages.UserMessagesParams,System.Threading.CancellationToken)">
+            <summary>
+            Get All messages only For Current User
+            </summary>
+            <param name="messagesParams"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
