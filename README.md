@@ -15,8 +15,8 @@ Chat App is a real-time messaging application built using .NET API and following
 - Entity Framework Core: Entity Framework Core used for data access and persistence, simplifying database interactions.
 - SignalR: Utilizes SignalR for real-time communication between clients and the server.
 - ASP.NET Identity: ASP.NET Identity for user authentication and authorization.
-- ![image](https://github.com/ahmedsamir010/Chat-App-/assets/89707420/8feaf44a-2132-408e-9d6e-3d3a2df60131)
-- ![image](https://github.com/ahmedsamir010/Chat-App-/assets/89707420/f9bcf63c-a23a-4c3e-bd05-bb4356017d64)
-- ![image](https://github.com/ahmedsamir010/Chat-App-/assets/89707420/05e3af28-3912-4c13-9164-d53f2b5deb68)
+![image](https://github.com/ahmedsamir010/Chat-App-/assets/89707420/8feaf44a-2132-408e-9d6e-3d3a2df60131)
+![image](https://github.com/ahmedsamir010/Chat-App-/assets/89707420/f9bcf63c-a23a-4c3e-bd05-bb4356017d64)
+![image](https://github.com/ahmedsamir010/Chat-App-/assets/89707420/05e3af28-3912-4c13-9164-d53f2b5deb68)
 
 
