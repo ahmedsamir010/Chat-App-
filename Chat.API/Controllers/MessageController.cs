@@ -27,13 +27,12 @@ namespace Chat.API.Controllers
             var response = await _mediator.Send(command);
             return response.IsSuccess ? Ok(response) : BadRequest(new { response.Message, response.Errors });
         }
-       
         /// <summary>
-        /// Get All messages only For Current User
+        /// Retrieves all messages for the current user.
         /// </summary>
-        /// <param name="messagesParams"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="messagesParams">Parameters for filtering, sorting, and pagination.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Returns a paginated list of messages belonging to the current user.</returns>
 
         [HttpGet("GetUserMessages")]
 
@@ -48,24 +47,21 @@ namespace Chat.API.Controllers
             return NotFound("No Message");
         }
 
-
+        /// <summary>
+        /// Retrieves messages read by the specified user.
+        /// </summary>
+        /// <param name="userName">The username of the recipient whose read messages are to be retrieved.</param>
+        /// <param name="ct">Cancellation token.</param>
+        /// <returns>Returns a collection of messages read by the specified user.</returns>
         [HttpGet("Get-message-read/{userName}")]
-        public async Task<ActionResult<MessageDto>> GetMessageRead(string userName,CancellationToken ct)
+        public async Task<ActionResult<MessageDto>> GetMessageRead(string userName, CancellationToken ct)
         {
             var query = await _mediator.Send(new GetMessageUserReadQuery(userName), ct);
-            if(query is not null)
+            if (query is not null)
             {
                 return Ok(query);
             }
             return NotFound("No Found Read Messages");
         }
-
-        //[HttpPost("DeleteMessage/{id}")]
-        //public async Task<ActionResult> DeleteMessage(int id)
-        //{
-            
-        //}
-
-
     }
 }

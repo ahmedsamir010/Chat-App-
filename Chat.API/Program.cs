@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using Chat.API.signalR;
 using System.Text.Json.Serialization;
 
-var builder = WebApplication.CreateBuilder(args);
+ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 services.AddControllers();
 services.AddLogging();
@@ -70,11 +70,11 @@ services.AddCors(options =>
 });
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors("CorsPolicy");

@@ -18,8 +18,11 @@ namespace Chat.API.Controllers
         {
             _mediator = mediator;
         }
-
-
+        /// <summary>
+        /// Adds a like for the specified user.
+        /// </summary>
+        /// <param name="userName">The username of the user to be liked.</param>
+        /// <returns>Returns an HTTP response indicating the result of the like operation.</returns>
         [HttpPost("Add-like/{userName}")]
         public async Task<IActionResult> AddLike(string userName)
         {
@@ -38,8 +41,12 @@ namespace Chat.API.Controllers
             }
             return NotFound("UserName Not Found");
         }
-
-
+        /// <summary>
+        /// Retrieves a paginated list of users who have been liked by the current user.
+        /// </summary>
+        /// <param name="likesParams">Parameters for pagination and filtering.</param>
+        /// <param name="ct">Cancellation token.</param>
+        /// <returns>Returns an HTTP response containing a paginated list of liked users.</returns>
         [HttpGet("get-uesers-like")]
         public async Task<ActionResult<Pagination<LikeDto>>> GetUsersLike([FromQuery]LikesParams likesParams, CancellationToken ct)
         {

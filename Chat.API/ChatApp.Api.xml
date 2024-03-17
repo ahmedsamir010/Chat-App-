@@ -4,16 +4,110 @@
         <name>Chat.API</name>
     </assembly>
     <members>
+        <member name="M:Chat.API.Controllers.AccountsController.Login(Chat.Application.Features.Accounts.Command.Login.LoginDto)">
+            <summary>
+            Handles user login with the provided login data.
+            </summary>
+            <param name="loginDto">The data required for user login.</param>
+            <returns>Returns an HTTP response containing the result of the login operation.</returns>
+        </member>
         <member name="M:Chat.API.Controllers.AccountsController.Register(Chat.Application.Features.Accounts.Command.Register.RegisterDto)">
             <summary>
-            Register a new user.
+            Registers a new user with the provided registration data.
             </summary>
-            <param name="registerDto">Registration details.</param>
-            <returns>An ActionResult representing the result of the registration.</returns>
-            <remarks>
-            Roles:[1=Admin,2=Member,3=User]
-            //baseUrl+/api/Register
-            </remarks> 
+            <param name="registerDto">The data required for user registration.</param>
+            <returns>Returns an HTTP response containing the result of the registration operation.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.VerifyEmail(Chat.Application.Features.Accounts.Command.VerifyEmai.VerificationDto)">
+            <summary>
+            Verifies the provided email address using the verification data.
+            </summary>
+            <param name="verificationDto">The data containing email address and verification code.</param>
+            <returns>Returns an indication of whether the email verification was successful or not.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.GetCurrentUser(System.Threading.CancellationToken)">
+            <summary>
+            Retrieves the details of the currently authenticated user.
+            </summary>
+            <param name="ct">Cancellation token to cancel the operation.</param>
+            <returns>Returns an action result containing the details of the currently authenticated user.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.CheckUserNameExist(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Checks if a username or email address already exists in the system.
+            </summary>
+            <param name="SearchTerm">The username or email address to check for existence.</param>
+            <param name="ct">Cancellation token to cancel the operation.</param>
+            <returns>Returns a boolean indicating whether the username or email address exists.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.GetAllUsers(Chat.Application.Helpers.Paginations.UserParams,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a paginated list of all users based on the specified parameters.
+            </summary>
+            <param name="userParams">The parameters for pagination and filtering.</param>
+            <param name="ct">Cancellation token to cancel the operation.</param>
+            <returns>Returns a paginated list of users.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.GetUserById(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a user by their unique identifier.
+            </summary>
+            <param name="Id">The unique identifier of the user to retrieve.</param>
+            <param name="ct">Cancellation token to cancel the operation.</param>
+            <returns>Returns the details of the user with the specified identifier.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.GetUserByName(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a user by their username.
+            </summary>
+            <param name="userName">The username of the user to retrieve.</param>
+            <param name="ct">Cancellation token to cancel the operation.</param>
+            <returns>Returns an ActionResult containing the details of the user with the specified username.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.GetUserByEmail(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a user by their email address.
+            </summary>
+            <param name="email">The email address of the user to retrieve.</param>
+            <param name="ct">Cancellation token to cancel the operation.</param>
+            <returns>Returns an ActionResult containing the details of the user with the specified email address.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.UpdateCurrentUser(Chat.Application.Features.Accounts.Command.UpdateCurrentUser.UpdateCurrentUserDto,System.Threading.CancellationToken)">
+            <summary>
+            Updates the current user's information.
+            </summary>
+            <param name="updateCurrentUserDto">The data containing updated user information.</param>
+            <param name="ct">Cancellation token to cancel the operation.</param>
+            <returns>Returns an ActionResult containing the response of the update operation.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.UploadPhoto(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Uploads a photo file to the server.
+            </summary>
+            <param name="file">The photo file to be uploaded.</param>
+            <returns>Returns an IActionResult representing the result of the upload operation.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.RemovePhoto(System.Int32)">
+            <summary>
+            Deletes a photo with the specified ID.
+            </summary>
+            <param name="id">The ID of the photo to be deleted.</param>
+            <returns>Returns an IActionResult representing the result of the photo deletion operation.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.SetMainPhoto(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Sets the main photo for a resource identified by the given ID.
+            </summary>
+            <param name="id">The ID of the resource for which the main photo is to be set.</param>
+            <param name="ct">Cancellation token to cancel the operation.</param>
+            <returns>Returns an IActionResult representing the result of setting the main photo.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.AccountsController.CreateMeeting(Chat.Application.Helpers.MeetingRequest)">
+            <summary>
+            Creates a Zoom meeting with the provided meeting details.
+            </summary>
+            <param name="model">The details of the meeting to be created.</param>
+            <returns>Returns the URL of the created Zoom meeting.</returns>
         </member>
         <member name="M:Chat.API.Controllers.MessageController.GetMessages(Chat.Application.Helpers.PaginationsMessages.UserMessagesParams,System.Threading.CancellationToken)">
             <summary>

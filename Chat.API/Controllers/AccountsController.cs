@@ -34,13 +34,15 @@ namespace Chat.API.Controllers
             _mediator = mediator;
             _logger = logger;
         }
-
+        /// <summary>
+        /// Handles user login with the provided login data.
+        /// </summary>
+        /// <param name="loginDto">The data required for user login.</param>
+        /// <returns>Returns an HTTP response containing the result of the login operation.</returns>
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<ActionResult<LoginDto>> Login(LoginDto loginDto)
         {
-            var token = HttpContext.Request.Headers["Authorization"];
-            _logger.LogInformation($"Incoming token: {token}");
             var command = new LoginCommand(loginDto);
             var response = await _mediator.Send(command);
             return response.responseStatus switch
@@ -52,14 +54,10 @@ namespace Chat.API.Controllers
             };
         }
         /// <summary>
-        /// Register a new user.
+        /// Registers a new user with the provided registration data.
         /// </summary>
-        /// <param name="registerDto">Registration details.</param>
-        /// <returns>An ActionResult representing the result of the registration.</returns>
-        /// <remarks>
-        /// Roles:[1=Admin,2=Member,3=User]
-        /// //baseUrl+/api/Register
-        /// </remarks> 
+        /// <param name="registerDto">The data required for user registration.</param>
+        /// <returns>Returns an HTTP response containing the result of the registration operation.</returns>
         [HttpPost("Register")]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesDefaultResponseType]
@@ -71,10 +69,15 @@ namespace Chat.API.Controllers
             return response.responseStatus switch
             {
                 ResponseStatus.Success => Ok(response.Data),
-                ResponseStatus.BadRequest => new ApiResponse(400,null, response.Errors),
+                ResponseStatus.BadRequest => new ApiResponse(400, response.Message, response.Errors),
                 _ => new ApiResponse(500)
             };
         }
+        /// <summary>
+        /// Verifies the provided email address using the verification data.
+        /// </summary>
+        /// <param name="verificationDto">The data containing email address and verification code.</param>
+        /// <returns>Returns an indication of whether the email verification was successful or not.</returns>
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesDefaultResponseType]
         [AllowAnonymous]
@@ -90,6 +93,12 @@ namespace Chat.API.Controllers
             return BadRequest("Faild to verify");
         }
 
+        /// <summary>
+        /// Retrieves the details of the currently authenticated user.
+        /// </summary>
+        /// <param name="ct">Cancellation token to cancel the operation.</param>
+        /// <returns>Returns an action result containing the details of the currently authenticated user.</returns>
+
         [Authorize]
         [HttpGet("GetCurrentUser")]
         public async Task<ActionResult<ApiResponse>> GetCurrentUser(CancellationToken ct)
@@ -101,12 +110,25 @@ namespace Chat.API.Controllers
             }
             return Ok(response);
         }
+        /// <summary>
+        /// Checks if a username or email address already exists in the system.
+        /// </summary>
+        /// <param name="SearchTerm">The username or email address to check for existence.</param>
+        /// <param name="ct">Cancellation token to cancel the operation.</param>
+        /// <returns>Returns a boolean indicating whether the username or email address exists.</returns>
+
         [HttpGet("Check-User-name-or-Email")]
         public async Task<ActionResult<bool>> CheckUserNameExist([FromQuery] string SearchTerm, CancellationToken ct)
         {
             var result = await _mediator.Send(new CheckUserNameOrEmailQuery(SearchTerm), ct);
             return (result is true) ? true : false;
         }
+        /// <summary>
+        /// Retrieves a paginated list of all users based on the specified parameters.
+        /// </summary>
+        /// <param name="userParams">The parameters for pagination and filtering.</param>
+        /// <param name="ct">Cancellation token to cancel the operation.</param>
+        /// <returns>Returns a paginated list of users.</returns>
 
         [HttpGet("Get-All-Users")]
         public async Task<ActionResult<MemberDto>> GetAllUsers([FromQuery] UserParams userParams,CancellationToken ct)
@@ -119,6 +141,13 @@ namespace Chat.API.Controllers
             Response.AddPaginationHeaders(users.CurrentPage,users.TotalPages,users.TotalCount,users.PageSize);
             return Ok(users);
         }
+        /// <summary>
+        /// Retrieves a user by their unique identifier.
+        /// </summary>
+        /// <param name="Id">The unique identifier of the user to retrieve.</param>
+        /// <param name="ct">Cancellation token to cancel the operation.</param>
+        /// <returns>Returns the details of the user with the specified identifier.</returns>
+
         [HttpGet("Get-User-By-Id")]
         public async Task<ActionResult<MemberDto>> GetUserById(string Id, CancellationToken ct)
         {
@@ -126,6 +155,12 @@ namespace Chat.API.Controllers
             if (user is not null) return Ok(user);
             else return NotFound();
         }
+        /// <summary>
+        /// Retrieves a user by their username.
+        /// </summary>
+        /// <param name="userName">The username of the user to retrieve.</param>
+        /// <param name="ct">Cancellation token to cancel the operation.</param>
+        /// <returns>Returns an ActionResult containing the details of the user with the specified username.</returns>
         [HttpGet("Get-User-By-Name")]
         public async Task<ActionResult<MemberDto>> GetUserByName(string userName, CancellationToken ct)
         {
@@ -134,6 +169,12 @@ namespace Chat.API.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Retrieves a user by their email address.
+        /// </summary>
+        /// <param name="email">The email address of the user to retrieve.</param>
+        /// <param name="ct">Cancellation token to cancel the operation.</param>
+        /// <returns>Returns an ActionResult containing the details of the user with the specified email address.</returns>
         [HttpGet("Get-User-By-Email")]
         public async Task<ActionResult<MemberDto>> GetUserByEmail(string email, CancellationToken ct)
         {
@@ -141,7 +182,12 @@ namespace Chat.API.Controllers
             if (user is null) return NotFound();
             return Ok(user);
         }
-
+        /// <summary>
+        /// Updates the current user's information.
+        /// </summary>
+        /// <param name="updateCurrentUserDto">The data containing updated user information.</param>
+        /// <param name="ct">Cancellation token to cancel the operation.</param>
+        /// <returns>Returns an ActionResult containing the response of the update operation.</returns>
         [HttpPut("Update-Current-User")]
         public async Task<ActionResult<ApiResponse>> UpdateCurrentUser(UpdateCurrentUserDto updateCurrentUserDto, CancellationToken ct)
         {
@@ -158,6 +204,11 @@ namespace Chat.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Uploads a photo file to the server.
+        /// </summary>
+        /// <param name="file">The photo file to be uploaded.</param>
+        /// <returns>Returns an IActionResult representing the result of the upload operation.</returns>
         [HttpPost("Upload-Photo")]
         public async Task<IActionResult> UploadPhoto(IFormFile file)
         {
@@ -174,8 +225,11 @@ namespace Chat.API.Controllers
 
             return BadRequest("Failed to upload the file");
         }
-        
-
+        /// <summary>
+        /// Deletes a photo with the specified ID.
+        /// </summary>
+        /// <param name="id">The ID of the photo to be deleted.</param>
+        /// <returns>Returns an IActionResult representing the result of the photo deletion operation.</returns>
         [HttpDelete("Remove-Photo/{id}")]
         public async Task<IActionResult> RemovePhoto(int id)
         {
@@ -187,6 +241,13 @@ namespace Chat.API.Controllers
             }
             return BadRequest("Failed to delete the photo. Please check the provided photo ID and try again.");
         }
+        /// <summary>
+        /// Sets the main photo for a resource identified by the given ID.
+        /// </summary>
+        /// <param name="id">The ID of the resource for which the main photo is to be set.</param>
+        /// <param name="ct">Cancellation token to cancel the operation.</param>
+        /// <returns>Returns an IActionResult representing the result of setting the main photo.</returns>
+
         [HttpPut("Set-Main-Photo/{id}")]
         public async Task<IActionResult> SetMainPhoto(int id, CancellationToken ct)
         {
@@ -206,7 +267,11 @@ namespace Chat.API.Controllers
                 return NotFound("The id is not valid");
             }
         }
-
+        /// <summary>
+        /// Creates a Zoom meeting with the provided meeting details.
+        /// </summary>
+        /// <param name="model">The details of the meeting to be created.</param>
+        /// <returns>Returns the URL of the created Zoom meeting.</returns>
         [AllowAnonymous]
         [HttpPost("Create-Meeting")]
         public async Task<IActionResult> CreateMeeting([FromBody] MeetingRequest model)
@@ -240,7 +305,7 @@ namespace Chat.API.Controllers
                 using (var httpClient = new HttpClient())
                 {
                     // Step 1: Encode Client ID and Client Secret
-                    string credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{model.ClientID}:{model.ClientSecret}"));
+                    string credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{"B95gfnxAS7Gyx4rAWpiv1A"}:{"psoRfbww33DFHM8lHpg3CB4cBmqQIGZD"}"));
 
                     // Step 2: Set up API Request Header
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
@@ -249,7 +314,7 @@ namespace Chat.API.Controllers
                     var tokenRequest = new Dictionary<string, string>
            {
                { "grant_type", "account_credentials" },
-               { "account_id", model.AccountID }
+               { "account_id", "VNr81cIxSBCPoWzExQVnnQ" }
            };
 
                     var content = new FormUrlEncodedContent(tokenRequest);
