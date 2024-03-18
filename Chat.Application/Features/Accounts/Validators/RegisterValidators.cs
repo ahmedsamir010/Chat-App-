@@ -6,34 +6,33 @@ namespace Chat.Application.Features.Accounts.Validators
     {
         public RegisterValidators()
         {
-
             RuleFor(x => x.FirstName)
-                .NotNull().WithMessage("First name required")
+                .NotNull().WithMessage("First name is required")
                 .NotEmpty().WithMessage("First name should not be empty")
-                .MinimumLength(3).WithMessage("Minimum length for first name is {PropertyValue}");
+                .MinimumLength(3).WithMessage("Minimum length for first name is {MinLength}");
 
             RuleFor(x => x.LastName)
-                .NotNull().WithMessage("Last name required")
+                .NotNull().WithMessage("Last name is required")
                 .NotEmpty().WithMessage("Last name should not be empty")
-                .MinimumLength(3).WithMessage("Minimum length for last name is {PropertyValue}");
+                .MinimumLength(3).WithMessage("Minimum length for last name is {MinLength}");
 
             RuleFor(x => x.Email)
-                .NotNull().WithMessage("Email address required")
+                .NotNull().WithMessage("Email address is required")
                 .NotEmpty().WithMessage("Email address should not be empty")
                 .EmailAddress().WithMessage("Invalid email address format");
+
             RuleFor(x => x.Password)
-                      .NotNull().WithMessage("Password required")
-                      .NotEmpty().WithMessage("Password should not be empty")
-                      .MinimumLength(6).WithMessage("Minimum length for password is {PropertyValue}");
+                .NotNull().WithMessage("Password is required")
+                .NotEmpty().WithMessage("Password should not be empty")
+                .MinimumLength(6).WithMessage("Minimum length for password is {MinLength}");
 
-
-  //          RuleFor(x => x.Password)
-  //.NotNull().WithMessage("Password required")
-  //        .NotEmpty().WithMessage("Password should not be empty")
-  //      .MinimumLength(6).WithMessage("Minimum length for password is {PropertyValue}")
-  //           .Matches(@"^(?=.*[A-Z])").WithMessage("Password must contain at least one uppercase letter")
-  //      .Matches(@"^(?=.*[a-z])").WithMessage("Password must contain at least one lowercase letter")
-  //         .Matches(@"^(?=.*\d)").WithMessage("Password must contain at least one digit");
+            //          RuleFor(x => x.Password)
+            //.NotNull().WithMessage("Password required")
+            //        .NotEmpty().WithMessage("Password should not be empty")
+            //      .MinimumLength(6).WithMessage("Minimum length for password is {PropertyValue}")
+            //           .Matches(@"^(?=.*[A-Z])").WithMessage("Password must contain at least one uppercase letter")
+            //      .Matches(@"^(?=.*[a-z])").WithMessage("Password must contain at least one lowercase letter")
+            //         .Matches(@"^(?=.*\d)").WithMessage("Password must contain at least one digit");
 
             RuleFor(x => x.Gender)
                 .NotNull().WithMessage("Gender required")

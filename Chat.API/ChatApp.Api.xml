@@ -124,6 +124,13 @@
             <param name="ct">Cancellation token.</param>
             <returns>Returns an HTTP response containing a paginated list of liked users.</returns>
         </member>
+        <member name="M:Chat.API.Controllers.MessageController.AddMessage(Chat.Application.Features.Message.Command.AddMessage.AddMessageDto)">
+            <summary>
+            Adds a new message.
+            </summary>
+            <param name="addMessageDto">The message to add.</param>
+            <returns>Returns the result of the operation.</returns>
+        </member>
         <member name="M:Chat.API.Controllers.MessageController.GetMessages(Chat.Application.Helpers.PaginationsMessages.UserMessagesParams,System.Threading.CancellationToken)">
             <summary>
             Retrieves all messages for the current user.
