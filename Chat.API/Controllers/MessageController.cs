@@ -4,14 +4,15 @@ using Chat.Application.Features.Message.Query.GetUserMessages;
 using Chat.Application.Helpers.PaginationsMessages;
 namespace Chat.API.Controllers
 {
-    public class MessageController : BaseController
+    public class MessageController(IMediator mediator) : BaseController(mediator)
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator = mediator;
 
-        public MessageController(IMediator mediator) : base(mediator)
-        {
-            _mediator = mediator;
-        }
+        /// <summary>
+        /// Adds a new message.
+        /// </summary>
+        /// <param name="addMessageDto">The message to add.</param>
+        /// <returns>Returns the result of the operation.</returns>
         [HttpPost("AddMessage")]
         public async Task<ActionResult> AddMessage([FromBody] AddMessageDto addMessageDto)
         {

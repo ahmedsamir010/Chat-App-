@@ -4,14 +4,10 @@ using Chat.Application.Helpers.PaginationLikes;
 using Chat.Infrastructe.Helpers;
 namespace Chat.API.Controllers
 {
-    public class LikeController : BaseController
+    public class LikeController(IMediator mediator) : BaseController(mediator)
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator = mediator;
 
-        public LikeController(IMediator mediator) : base(mediator)
-        {
-            _mediator = mediator;
-        }
         /// <summary>
         /// Adds a like for the specified user.
         /// </summary>

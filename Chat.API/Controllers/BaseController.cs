@@ -5,13 +5,8 @@
     [ApiController]
     [Produces("application/json")]
     [Authorize] 
-    public class BaseController : ControllerBase
+    public class BaseController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public BaseController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
     }
 }

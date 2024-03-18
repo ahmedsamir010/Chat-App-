@@ -1,15 +1,10 @@
 ﻿namespace Chat.API.Controllers
 {
-    public class AccountsController : BaseController
+    public class AccountsController(IMediator mediator, ILogger<AccountsController> logger) : BaseController(mediator)
     {
-        private readonly IMediator _mediator;
-        private readonly ILogger<AccountsController> _logger;
+        private readonly IMediator _mediator = mediator;
+        private readonly ILogger<AccountsController> _logger = logger;
 
-        public AccountsController(IMediator mediator, ILogger<AccountsController> logger) : base(mediator)
-        {
-            _mediator = mediator;
-            _logger = logger;
-        }
         /// <summary>
         /// Handles user login with the provided login data.
         /// </summary>

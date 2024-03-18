@@ -109,13 +109,36 @@
             <param name="model">The details of the meeting to be created.</param>
             <returns>Returns the URL of the created Zoom meeting.</returns>
         </member>
+        <member name="M:Chat.API.Controllers.LikeController.AddLike(System.String)">
+            <summary>
+            Adds a like for the specified user.
+            </summary>
+            <param name="userName">The username of the user to be liked.</param>
+            <returns>Returns an HTTP response indicating the result of the like operation.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.LikeController.GetUsersLike(Chat.Application.Helpers.PaginationLikes.LikesParams,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a paginated list of users who have been liked by the current user.
+            </summary>
+            <param name="likesParams">Parameters for pagination and filtering.</param>
+            <param name="ct">Cancellation token.</param>
+            <returns>Returns an HTTP response containing a paginated list of liked users.</returns>
+        </member>
         <member name="M:Chat.API.Controllers.MessageController.GetMessages(Chat.Application.Helpers.PaginationsMessages.UserMessagesParams,System.Threading.CancellationToken)">
             <summary>
-            Get All messages only For Current User
+            Retrieves all messages for the current user.
             </summary>
-            <param name="messagesParams"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
+            <param name="messagesParams">Parameters for filtering, sorting, and pagination.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Returns a paginated list of messages belonging to the current user.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.MessageController.GetMessageRead(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves messages read by the specified user.
+            </summary>
+            <param name="userName">The username of the recipient whose read messages are to be retrieved.</param>
+            <param name="ct">Cancellation token.</param>
+            <returns>Returns a collection of messages read by the specified user.</returns>
         </member>
     </members>
 </doc>
