@@ -1,7 +1,5 @@
 ﻿using Chat.Application.Features.Accounts.Command.Register;
 using FluentValidation;
-using System;
-
 namespace Chat.Application.Features.Accounts.Validators
 {
     public class RegisterValidators : AbstractValidator<RegisterDto>

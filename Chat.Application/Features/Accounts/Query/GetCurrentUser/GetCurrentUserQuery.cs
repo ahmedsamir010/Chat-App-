@@ -1,5 +1,4 @@
 ﻿using Chat.Application.Presistance.Contracts;
-using Chat.Application.Response;
 using Chat.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;

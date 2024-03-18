@@ -1,15 +1,7 @@
 ﻿using Chat.Application.Features.Message.Command.AddMessage;
-using Chat.Application.Features.Message.Query.GetAllMessages;
 using Chat.Application.Features.Message.Query.GetMessageUserRead;
 using Chat.Application.Features.Message.Query.GetUserMessages;
-using Chat.Application.Helpers.Paginations;
 using Chat.Application.Helpers.PaginationsMessages;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-
 namespace Chat.API.Controllers
 {
     public class MessageController : BaseController

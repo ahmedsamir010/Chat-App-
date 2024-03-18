@@ -2,31 +2,17 @@
 using Chat.Application.Features.Accounts.Query.GetAllUsers;
 using Chat.Application.Presistance.Contracts;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Chat.Application.Features.Accounts.Query.GetUserById
 {
-    public class GetUserByIdQuery : IRequest<MemberDto>
+    public class GetUserByIdQuery(string Id) : IRequest<MemberDto>
     {
-        private readonly string _Id;
-        public GetUserByIdQuery(string Id)
-        {
-            _Id = Id;
-        }
-        class Handler : IRequestHandler<GetUserByIdQuery, MemberDto>
-        {
-            private readonly IUserRepository _userRepository;
-            private readonly IMapper _mapper;
+        private readonly string _Id = Id;
 
-            public Handler(IUserRepository userRepository, IMapper mapper)
-            {
-                _userRepository = userRepository;
-                _mapper = mapper;
-            }
+        class Handler(IUserRepository userRepository, IMapper mapper) : IRequestHandler<GetUserByIdQuery, MemberDto>
+        {
+            private readonly IUserRepository _userRepository = userRepository;
+            private readonly IMapper _mapper = mapper;
+
             public async Task<MemberDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
             {
                 if (!string.IsNullOrEmpty(request._Id))

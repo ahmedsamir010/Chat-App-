@@ -5,30 +5,17 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-
 namespace Chat.Application.Features.Like.Command
 {
-    public class AddLikeCommand : IRequest<BaseCommonResponse>
+    public class AddLikeCommand(string userName) : IRequest<BaseCommonResponse>
     {
-        public string UserName { get; }
+        public string UserName { get; } = userName;
 
-        public AddLikeCommand(string userName)
+        public class Handler(ILikeRepository likeRepository, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager) : IRequestHandler<AddLikeCommand, BaseCommonResponse>
         {
-            UserName = userName;
-        }
-
-        public class Handler : IRequestHandler<AddLikeCommand, BaseCommonResponse>
-        {
-            private readonly ILikeRepository _likeRepository;
-            private readonly IHttpContextAccessor _httpContextAccessor;
-            private readonly UserManager<AppUser> _userManager;
-
-            public Handler(ILikeRepository likeRepository, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
-            {
-                _likeRepository = likeRepository;
-                _httpContextAccessor = httpContextAccessor;
-                _userManager = userManager;
-            }
+            private readonly ILikeRepository _likeRepository = likeRepository;
+            private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+            private readonly UserManager<AppUser> _userManager = userManager;
 
             public async Task<BaseCommonResponse> Handle(AddLikeCommand request, CancellationToken cancellationToken)
             {

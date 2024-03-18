@@ -7,26 +7,16 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 namespace Chat.Application.Features.Message.Query.GetMessageUserRead
 {
-    public class GetMessageUserReadQuery : IRequest<IEnumerable<MessageDto>>
+    public class GetMessageUserReadQuery(string recipentUserName) : IRequest<IEnumerable<MessageDto>>
     {
-        public string RecipentUserName { get; set; }
-        public string currentUserName { get; set; }
-        public GetMessageUserReadQuery(string recipentUserName)
+        public string RecipentUserName { get; set; } = recipentUserName;
+      //  public string currentUserName { get; set; }
+        class Handler(UserManager<AppUser> userManager, IMessageRepository messageRepository, IHttpContextAccessor httpContextAccessor) : IRequestHandler<GetMessageUserReadQuery, IEnumerable<MessageDto>>
         {
-            RecipentUserName = recipentUserName;
-        }
-        class Handler : IRequestHandler<GetMessageUserReadQuery, IEnumerable<MessageDto>>
-        {
-            private readonly UserManager<AppUser> _userManager;
-            private readonly IMessageRepository _messageRepository;
-            private readonly IHttpContextAccessor _httpContextAccessor;
+            private readonly UserManager<AppUser> _userManager = userManager;
+            private readonly IMessageRepository _messageRepository = messageRepository;
+            private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-            public Handler(UserManager<AppUser> userManager,IMessageRepository messageRepository,IHttpContextAccessor httpContextAccessor)
-            {
-                _userManager = userManager;
-                _messageRepository = messageRepository;
-                _httpContextAccessor = httpContextAccessor;
-            }
             public async Task<IEnumerable<MessageDto>> Handle(GetMessageUserReadQuery request, CancellationToken cancellationToken)
             {
                 var userId=_httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(x=>x.Type==ClaimTypes.NameIdentifier)?.Value;

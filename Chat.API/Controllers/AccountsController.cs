@@ -1,28 +1,4 @@
-﻿using Chat.API.Errors;
-using Chat.Application.Features.Accounts.Command.Login;
-using Chat.Application.Features.Accounts.Command.Register;
-using Chat.Application.Features.Accounts.Command.RemoveFile;
-using Chat.Application.Features.Accounts.Command.SetMainPhoto;
-using Chat.Application.Features.Accounts.Command.UpdateCurrentUser;
-using Chat.Application.Features.Accounts.Command.UpdatePhoto;
-using Chat.Application.Features.Accounts.Command.VerifyEmai;
-using Chat.Application.Features.Accounts.Query.CheckUserNameOrEmail;
-using Chat.Application.Features.Accounts.Query.GetAllUsers;
-using Chat.Application.Features.Accounts.Query.GetCurrentUser;
-using Chat.Application.Features.Accounts.Query.GetUserByEmail;
-using Chat.Application.Features.Accounts.Query.GetUserById;
-using Chat.Application.Features.Accounts.Query.GetUserByName;
-using Chat.Application.Helpers;
-using Chat.Application.Helpers.Paginations;
-using Chat.Application.Response;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-namespace Chat.API.Controllers
+﻿namespace Chat.API.Controllers
 {
     public class AccountsController : BaseController
     {

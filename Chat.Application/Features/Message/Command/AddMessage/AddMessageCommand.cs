@@ -8,39 +8,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace Chat.Application.Features.Message.Command.AddMessage
 {
-    public class AddMessageCommand : IRequest<BaseCommonResponse>
+    public class AddMessageCommand(AddMessageDto messageDto) : IRequest<BaseCommonResponse>
     {
-        public AddMessageDto AddMessageDto { get; }
+        public AddMessageDto AddMessageDto { get; } = messageDto;
 
-        public AddMessageCommand(AddMessageDto messageDto)
+        public class Handler(IConfiguration configuration, IMessageRepository messageRepository, UserManager<AppUser> userManager, IMapper mapper, IHttpContextAccessor httpContextAccessor) : IRequestHandler<AddMessageCommand, BaseCommonResponse>
         {
-            AddMessageDto = messageDto;
-        }
-
-        public class Handler : IRequestHandler<AddMessageCommand, BaseCommonResponse>
-        {
-            private readonly IConfiguration _configuration;
-            private readonly IMessageRepository _messageRepository;
-            private readonly UserManager<AppUser> _userManager;
-            private readonly IMapper _mapper;
-            private readonly IHttpContextAccessor _httpContextAccessor;
-
-            public Handler(IConfiguration configuration,IMessageRepository messageRepository, UserManager<AppUser> userManager, IMapper mapper, IHttpContextAccessor httpContextAccessor)
-            {
-                _configuration = configuration;
-                _messageRepository = messageRepository;
-                _userManager = userManager;
-                _mapper = mapper;
-                _httpContextAccessor = httpContextAccessor;
-            }
+            private readonly IConfiguration _configuration = configuration;
+            private readonly IMessageRepository _messageRepository = messageRepository;
+            private readonly UserManager<AppUser> _userManager = userManager;
+            private readonly IMapper _mapper = mapper;
+            private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
             public async Task<BaseCommonResponse> Handle(AddMessageCommand request, CancellationToken cancellationToken)
             {

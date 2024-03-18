@@ -1,13 +1,7 @@
-﻿using Chat.Application.Features.Accounts.Query.GetAllUsers;
-using Chat.Application.Features.Like.Command;
+﻿using Chat.Application.Features.Like.Command;
 using Chat.Application.Features.Like.Query;
 using Chat.Application.Helpers.PaginationLikes;
-using Chat.Application.Helpers.Paginations;
 using Chat.Infrastructe.Helpers;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
 namespace Chat.API.Controllers
 {
     public class LikeController : BaseController

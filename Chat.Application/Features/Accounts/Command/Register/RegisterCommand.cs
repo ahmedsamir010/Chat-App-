@@ -8,10 +8,6 @@ using Chat.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Net;
-using System.Security.Policy;
-
 namespace Chat.Application.Features.Accounts.Command.Register
 {
     public class RegisterCommand : IRequest<BaseCommonResponse>

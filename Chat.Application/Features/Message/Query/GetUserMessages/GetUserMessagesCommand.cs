@@ -9,28 +9,16 @@ using System.Security.Claims;
 
 namespace Chat.Application.Features.Message.Query.GetUserMessages
 {
-    public class GetUserMessagesCommand:IRequest<Pagination<MessageDto>>
+    public class GetUserMessagesCommand(UserMessagesParams messagesParams) : IRequest<Pagination<MessageDto>>
     {
-        private readonly UserMessagesParams _messagesParams;
+        private readonly UserMessagesParams _messagesParams = messagesParams;
 
-        public GetUserMessagesCommand(UserMessagesParams messagesParams)
+        class Handler(IMessageRepository messageRepository, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager) : IRequestHandler<GetUserMessagesCommand, Pagination<MessageDto>>
         {
-            _messagesParams = messagesParams;
-        }
+            private readonly IMessageRepository _messageRepository = messageRepository;
+            private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+            private readonly UserManager<AppUser> _userManager = userManager;
 
-
-        class Handler : IRequestHandler<GetUserMessagesCommand, Pagination<MessageDto>>
-        {
-            private readonly IMessageRepository _messageRepository;
-            private readonly IHttpContextAccessor _httpContextAccessor;
-            private readonly UserManager<AppUser> _userManager;
-
-            public Handler(IMessageRepository messageRepository,IHttpContextAccessor httpContextAccessor,UserManager<AppUser> userManager)
-            {
-                _messageRepository = messageRepository;
-                _httpContextAccessor = httpContextAccessor;
-                _userManager = userManager;
-            }
             public async Task<Pagination<MessageDto>> Handle(GetUserMessagesCommand request, CancellationToken cancellationToken)
             {
                 var userId=_httpContextAccessor?.HttpContext?.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.NameIdentifier)?.Value;

@@ -10,15 +10,9 @@ using System.Security.Claims;
 
 namespace Chat.Application.Features.Like.Query
 {
-    public class GetUsersLikeQuery:IRequest<Pagination<LikeDto>>
+    public class GetUsersLikeQuery(LikesParams likesParams) : IRequest<Pagination<LikeDto>>
     {
-        private readonly LikesParams _likesParams;
-
-        public GetUsersLikeQuery(LikesParams likesParams)
-        {
-            _likesParams = likesParams;
-        }
-
+        private readonly LikesParams _likesParams= likesParams;
         class Handler:IRequestHandler<GetUsersLikeQuery,Pagination<LikeDto>>
         {
             private readonly ILikeRepository _likeRepository;
