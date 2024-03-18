@@ -4,23 +4,14 @@ using Chat.Application.Presistance.Contracts;
 using MediatR;
 namespace Chat.Application.Features.Accounts.Query.GetUserByName
 {
-    public class GetUserByNameQuery:IRequest<MemberDto>
+    public class GetUserByNameQuery(string username) : IRequest<MemberDto>
     {
-        private readonly string Username;
-        public GetUserByNameQuery(string username)
-        {
-            Username = username;
-        }
-        class handler:IRequestHandler<GetUserByNameQuery,MemberDto>
-        {
-            private readonly IUserRepository _userRepository;
-            private readonly IMapper _mapper;
+        private readonly string Username = username;
 
-            public handler(IUserRepository userRepository,IMapper mapper)
-            {
-                _userRepository = userRepository;
-                _mapper = mapper;
-            }
+        class Handler(IUserRepository userRepository, IMapper mapper) : IRequestHandler<GetUserByNameQuery,MemberDto>
+        {
+            private readonly IUserRepository _userRepository = userRepository;
+            private readonly IMapper _mapper = mapper;
 
             public async Task<MemberDto> Handle(GetUserByNameQuery request, CancellationToken cancellationToken)
             {

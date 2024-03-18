@@ -4,22 +4,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Chat.Application.Features.Accounts.Command.VerifyEmai
 {
-    public class VerifyEmailCommand : IRequest<bool>
+    public class VerifyEmailCommand(VerificationDto verificationDto) : IRequest<bool>
     {
-        private readonly VerificationDto _verificationDto;
+        private readonly VerificationDto _verificationDto = verificationDto;
 
-        public VerifyEmailCommand(VerificationDto verificationDto)
+        class Handler(UserManager<AppUser> userManager) : IRequestHandler<VerifyEmailCommand, bool>
         {
-            _verificationDto = verificationDto;
-        }
-        class Handler : IRequestHandler<VerifyEmailCommand, bool>
-        {
-            private readonly UserManager<AppUser> _userManager;
+            private readonly UserManager<AppUser> _userManager = userManager;
 
-            public Handler(UserManager<AppUser> userManager)
-            {
-                _userManager = userManager;
-            }
             public async Task<bool> Handle(VerifyEmailCommand request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(request._verificationDto.Email);

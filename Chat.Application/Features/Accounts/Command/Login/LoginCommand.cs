@@ -8,14 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 namespace Chat.Application.Features.Accounts.Command.Login
 {
-    public class LoginCommand : IRequest<BaseCommonResponse>
+    public class LoginCommand(LoginDto loginDto) : IRequest<BaseCommonResponse>
     {
-        private readonly LoginDto _loginDto;
-
-        public LoginCommand(LoginDto loginDto)
-        {
-            _loginDto = loginDto;
-        }
+        private readonly LoginDto _loginDto = loginDto;
 
         class Handler : IRequestHandler<LoginCommand, BaseCommonResponse>
         {

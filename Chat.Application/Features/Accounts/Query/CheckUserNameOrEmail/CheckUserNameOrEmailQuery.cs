@@ -3,18 +3,14 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 namespace Chat.Application.Features.Accounts.Query.CheckUserNameOrEmail
 {
-    public class CheckUserNameOrEmailQuery : IRequest<bool>
+    public class CheckUserNameOrEmailQuery(string searchTerm) : IRequest<bool>
     {
-        public string SearchTerm { get; set; } = default!;
-        public CheckUserNameOrEmailQuery(string searchTerm)
+        public string SearchTerm { get; set; } = searchTerm;
+
+        class Handler(UserManager<AppUser> userManager) : IRequestHandler<CheckUserNameOrEmailQuery, bool>
         {
-            SearchTerm = searchTerm;
-        }
-        class Handler : IRequestHandler<CheckUserNameOrEmailQuery, bool>
-        {
-            private readonly UserManager<AppUser> _userManager;
-            public Handler(UserManager<AppUser> userManager)
-                    => _userManager = userManager;
+            private readonly UserManager<AppUser> _userManager = userManager;
+
             public async Task<bool> Handle(CheckUserNameOrEmailQuery request, CancellationToken cancellationToken)
             {
                 if (!string.IsNullOrWhiteSpace(request.SearchTerm))

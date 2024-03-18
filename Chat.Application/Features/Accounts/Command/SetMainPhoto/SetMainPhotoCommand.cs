@@ -5,14 +5,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Chat.Application.Features.Accounts.Command.SetMainPhoto
 {
-    public class SetMainPhotoCommand : IRequest<bool>
+    public class SetMainPhotoCommand(int id) : IRequest<bool>
     {
-        private readonly int _id;
-
-        public SetMainPhotoCommand(int id)
-        {
-            _id = id;
-        }
+        private readonly int _id = id;
 
         class Handler : IRequestHandler<SetMainPhotoCommand, bool>
         {

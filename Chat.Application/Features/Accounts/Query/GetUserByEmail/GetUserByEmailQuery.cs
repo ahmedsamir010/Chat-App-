@@ -4,14 +4,9 @@ using Chat.Application.Presistance.Contracts;
 using MediatR;
 namespace Chat.Application.Features.Accounts.Query.GetUserByEmail
 {
-    public class GetUserByEmailQuery : IRequest<MemberDto>
+    public class GetUserByEmailQuery(string email) : IRequest<MemberDto>
     {
-        private readonly string _Email;
-
-        public GetUserByEmailQuery(string email)
-        {
-            _Email = email;
-        }
+        private readonly string _Email = email;
 
         class Handler : IRequestHandler<GetUserByEmailQuery, MemberDto>
         {

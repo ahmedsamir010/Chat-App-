@@ -7,26 +7,16 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 namespace Chat.Application.Features.Accounts.Command.UpdateCurrentUser
 {
-    public class UpdateCurrentUserCommand : IRequest<BaseCommonResponse>
+    public class UpdateCurrentUserCommand(UpdateCurrentUserDto updateCurrentUserDto) : IRequest<BaseCommonResponse>
     {
-        private readonly UpdateCurrentUserDto _updateCurrentUserDto;
-        public UpdateCurrentUserCommand(UpdateCurrentUserDto updateCurrentUserDto)
-        {
-            _updateCurrentUserDto = updateCurrentUserDto;
-        }
+        private readonly UpdateCurrentUserDto _updateCurrentUserDto = updateCurrentUserDto;
 
-        class Handler : IRequestHandler<UpdateCurrentUserCommand, BaseCommonResponse>
+        class Handler(UserManager<AppUser> userManager, IHttpContextAccessor httpContext, IMapper mapper) : IRequestHandler<UpdateCurrentUserCommand, BaseCommonResponse>
         {
-            private readonly UserManager<AppUser> _userManager;
-            private readonly IHttpContextAccessor _httpContext;
-            private readonly IMapper _mapper;
+            private readonly UserManager<AppUser> _userManager = userManager;
+            private readonly IHttpContextAccessor _httpContext = httpContext;
+            private readonly IMapper _mapper = mapper;
 
-            public Handler(UserManager<AppUser> userManager,IHttpContextAccessor httpContext,IMapper mapper)
-            {
-                _userManager = userManager;
-                _httpContext = httpContext;
-                _mapper = mapper;
-            }
             public async Task<BaseCommonResponse> Handle(UpdateCurrentUserCommand request, CancellationToken cancellationToken)
             {
                 BaseCommonResponse response = new();

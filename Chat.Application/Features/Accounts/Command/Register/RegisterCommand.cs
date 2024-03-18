@@ -10,15 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 namespace Chat.Application.Features.Accounts.Command.Register
 {
-    public class RegisterCommand : IRequest<BaseCommonResponse>
+    public class RegisterCommand(RegisterDto registerDto) : IRequest<BaseCommonResponse>
     {
-        private readonly RegisterDto _registerDto;
-
-        public RegisterCommand(RegisterDto registerDto)
-        {
-            _registerDto = registerDto;
-        }
-
+        private readonly RegisterDto _registerDto = registerDto;
 
         class Hanler : IRequestHandler<RegisterCommand, BaseCommonResponse>
         {

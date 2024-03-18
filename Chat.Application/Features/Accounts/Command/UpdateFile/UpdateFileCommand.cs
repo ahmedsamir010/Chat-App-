@@ -3,14 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 namespace Chat.Application.Features.Accounts.Command.UpdatePhoto
 {
-    public class UpdateFileCommand : IRequest<bool>
+    public class UpdateFileCommand(IFormFile File) : IRequest<bool>
     {
-        private IFormFile _file { get; set; }
+        private IFormFile _file { get; set; } = File;
 
-        public UpdateFileCommand(IFormFile File)
-        {
-            _file = File;
-        }
         class Handler : IRequestHandler<UpdateFileCommand, bool>
         {
             private readonly IUserRepository _userRepository;

@@ -2,23 +2,14 @@
 using MediatR;
 namespace Chat.Application.Features.Accounts.Command.RemoveFile
 {
-    public class RemoveCommandPhoto : IRequest<bool>
+    public class RemoveCommandPhoto(int id) : IRequest<bool>
     {
-        private readonly int _Id;
+        private readonly int _Id = id;
 
-        public RemoveCommandPhoto(int id)
+        class Handler(IUserRepository userRepository) : IRequestHandler<RemoveCommandPhoto, bool>
         {
-            _Id = id;
-        }
+            private readonly IUserRepository _userRepository = userRepository;
 
-        class Handler : IRequestHandler<RemoveCommandPhoto, bool>
-        {
-            private readonly IUserRepository _userRepository;
-
-            public Handler(IUserRepository userRepository)
-            {
-                _userRepository = userRepository;
-            }
             public async Task<bool> Handle(RemoveCommandPhoto request, CancellationToken cancellationToken)
             {
                 if (request._Id > 0)
