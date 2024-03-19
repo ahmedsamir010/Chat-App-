@@ -3,6 +3,7 @@ using Chat.Application.ExtensionMethods;
 using Microsoft.OpenApi.Models;
 using Chat.API.signalR;
 using System.Text.Json.Serialization;
+using Chat.API;
 
  var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -81,5 +82,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<PresenceHub>(pattern: "hubs/presence");
 app.MapHub<MessageHub>(pattern: "hubs/message");
+app.MapHub<NotificationHub>(pattern: "hubs/notification");
 ConfigurePresistanceService.ConfigureMiddleWare(app);
 app.Run();
