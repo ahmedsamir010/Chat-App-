@@ -5,7 +5,7 @@ using Chat.API.signalR;
 using System.Text.Json.Serialization;
 using Chat.API;
 
- var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 services.AddControllers();
 services.AddLogging();
@@ -38,7 +38,7 @@ services.AddSwaggerGen(setupAction =>
         }
     });
     // configure xml 
-    var xmlFile = "ChatApp.Api.xml"; 
+    var xmlFile = "ChatApp.Api.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     setupAction.IncludeXmlComments(xmlPath);
 });
@@ -70,8 +70,8 @@ services.AddCors(options =>
 var app = builder.Build();
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 //}
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();

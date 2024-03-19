@@ -36,7 +36,7 @@ namespace Chat.API.Controllers
                 return Ok();
             }
             catch (FirebaseMessagingException ex)
-            {  
+            {
                 Console.WriteLine($"FCM Error: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to send notification: Invalid registration token");
             }
@@ -47,7 +47,7 @@ namespace Chat.API.Controllers
             }
         }
 
-        [HttpPost("SendNotificationToPC")]    
+        [HttpPost("SendNotificationToPC")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> SendNotificationToPC(string title, string content)
         {
