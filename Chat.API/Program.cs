@@ -42,9 +42,6 @@ services.AddSwaggerGen(setupAction =>
     setupAction.IncludeXmlComments(xmlPath);
 });
 
-
-
-
 // Configure Servivce 
 
 services.AddConfigurePresistanceService(builder.Configuration);
@@ -75,6 +72,7 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors("CorsPolicy");

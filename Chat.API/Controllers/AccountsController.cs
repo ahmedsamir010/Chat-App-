@@ -1,4 +1,9 @@
-﻿namespace Chat.API.Controllers
+﻿using Chat.Application.Features.Accounts.Command.ChangePassword;
+using Chat.Application.Features.Accounts.Command.UpdateFile;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+
+namespace Chat.API.Controllers
 {
     public class AccountsController(IMediator mediator, ILogger<AccountsController> logger) : BaseController(mediator)
     {
@@ -44,11 +49,35 @@
                 _ => new ApiResponse(500)
             };
         }
+
+
+        /// <summary>
+        /// Changes the password of the authenticated user.
+        /// </summary>
+        /// <param name="changePasswordDto">The data transfer object containing the current password, new password, and confirm password.</param>
+        /// <returns>
+        /// An action result containing an ApiResponse indicating the success or failure of the password change operation.
+        /// If the password change is successful, returns HTTP 200 with a success message.
+        /// If the password change fails, returns HTTP 400 with an error message.
+        /// </returns>
+        [HttpPost("ChangePassword")]
+        [Authorize]
+        public async Task<ActionResult<ApiResponse>> ChangePassword([FromBody]ChangePasswordDto changePasswordDto)
+        {
+           var command=new ChangePasswordCommand(changePasswordDto);
+            var response = await _mediator.Send(command);
+            if (response)
+            {
+                return Ok(new ApiResponse(200, "Password has been changed."));
+            }
+            return BadRequest(new ApiResponse(400, "Failed to change the password ... Please Try again"));
+        }
         /// <summary>
         /// Verifies the provided email address using the verification data.
         /// </summary>
         /// <param name="verificationDto">The data containing email address and verification code.</param>
         /// <returns>Returns an indication of whether the email verification was successful or not.</returns>
+
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesDefaultResponseType]
         [AllowAnonymous]

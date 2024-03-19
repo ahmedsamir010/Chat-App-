@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Chat.Application.Helpers.Paginations;
 using Chat.Application.Presistance.Contracts;
-using Chat.Infrastructe.Helpers;
 using MediatR;
 namespace Chat.Application.Features.Accounts.Query.GetAllUsers
 {

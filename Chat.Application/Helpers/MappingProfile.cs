@@ -4,12 +4,11 @@ using Chat.Application.Features.Message.Query.GetAllMessages;
 using Chat.Domain.Entities;
 using Chat.Application.ExtensionMethods;
 using Chat.Application.Features.Accounts.Command.UpdateCurrentUser;
-using Chat.Application.Helpers;
 using Chat.Application.Features.Accounts.Command.Register;
 using Chat.Application.Features.Message.Command.AddMessage;
 using Chat.Application.Features.Message.Query.GetUserMessages;
 
-namespace Chat.Application.MappingProfiles
+namespace Chat.Application.Helpers
 {
     public class MappingProfile : Profile
     {

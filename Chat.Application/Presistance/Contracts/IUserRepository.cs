@@ -1,7 +1,6 @@
 ﻿using Chat.Application.Features.Accounts.Query.GetAllUsers;
 using Chat.Application.Helpers.Paginations;
 using Chat.Domain.Entities;
-using Chat.Infrastructe.Helpers;
 using Microsoft.AspNetCore.Http;
 
 namespace Chat.Application.Presistance.Contracts

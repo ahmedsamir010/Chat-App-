@@ -1,8 +1,8 @@
 ﻿using Chat.Application.Features.Like.Command;
 using Chat.Application.Helpers.PaginationLikes;
+using Chat.Application.Helpers.Paginations;
 using Chat.Application.Presistance.Contracts;
 using Chat.Domain.Entities;
-using Chat.Infrastructe.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

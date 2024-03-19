@@ -1,7 +1,7 @@
 ﻿using Chat.Application.Features.Message.Query.GetUserMessages;
+using Chat.Application.Helpers.Paginations;
 using Chat.Application.Helpers.PaginationsMessages;
 using Chat.Domain.Entities;
-using Chat.Infrastructe.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

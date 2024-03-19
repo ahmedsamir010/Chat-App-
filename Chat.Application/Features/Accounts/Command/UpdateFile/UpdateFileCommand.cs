@@ -1,7 +1,7 @@
 ﻿using Chat.Application.Presistance.Contracts;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-namespace Chat.Application.Features.Accounts.Command.UpdatePhoto
+namespace Chat.Application.Features.Accounts.Command.UpdateFile
 {
     public class UpdateFileCommand(IFormFile File) : IRequest<bool>
     {
@@ -18,9 +18,9 @@ namespace Chat.Application.Features.Accounts.Command.UpdatePhoto
 
             public async Task<bool> Handle(UpdateFileCommand request, CancellationToken cancellationToken)
             {
-                if(request._file is not null)
+                if (request._file is not null)
                 {
-                    var result=await _userRepository.UploadFile(request._file, "User");
+                    var result = await _userRepository.UploadFile(request._file, "User");
                     if (result is true) return true;
                     else return false;
                 }

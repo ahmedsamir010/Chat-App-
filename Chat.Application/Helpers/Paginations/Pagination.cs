@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Chat.Infrastructe.Helpers
+namespace Chat.Application.Helpers.Paginations
 {
     public class Pagination<T> : List<T>
     {

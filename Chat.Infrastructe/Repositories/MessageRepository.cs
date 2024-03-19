@@ -1,19 +1,12 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Chat.Application.Features.Message.Query.GetUserMessages;
+using Chat.Application.Helpers.Paginations;
 using Chat.Application.Helpers.PaginationsMessages;
 using Chat.Application.Presistance.Contracts;
 using Chat.Domain.Entities;
 using Chat.Infrastructe.Data;
-using Chat.Infrastructe.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Chat.Infrastructe.Repositories
 {
     public class MessageRepository : GenericRepository<Message>, IMessageRepository

@@ -1,7 +1,6 @@
 ﻿using Chat.Application.Features.Like.Command;
 using Chat.Application.Features.Like.Query;
 using Chat.Application.Helpers.PaginationLikes;
-using Chat.Infrastructe.Helpers;
 namespace Chat.API.Controllers
 {
     public class LikeController(IMediator mediator) : BaseController(mediator)

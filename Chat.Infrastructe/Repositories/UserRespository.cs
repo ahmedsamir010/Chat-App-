@@ -5,7 +5,6 @@ using Chat.Application.Helpers.Paginations;
 using Chat.Application.Presistance.Contracts;
 using Chat.Domain.Entities;
 using Chat.Infrastructe.Data;
-using Chat.Infrastructe.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -145,11 +144,11 @@ namespace Chat.Infrastructe.Repositories
             {
                 var user = await _userManager.FindByIdAsync(currentUser);
 
-                if (user != null)
-                {
-                    userParams.Gender = user.Gender;
-                    userParams.CurrentUserName = user.UserName;
-                }
+                //if (user != null)
+                //{
+                //    userParams.Gender = user.Gender;
+                //    userParams.CurrentUserName = user.UserName;
+                //}
             }
 
             var users = _dbContext.Users.Include(p => p.Photos).AsQueryable();
@@ -162,18 +161,16 @@ namespace Chat.Infrastructe.Repositories
             else
             {
                 // Assuming there are only two genders (male and female)
-                var oppositeGender = userParams.Gender.ToLower() == "male" ? "female" : "male";
+                var oppositeGender = userParams?.Gender?.ToLower() == "male" ? "female" : "male";
                 users = users.Where(u => u.Gender == oppositeGender);
             }
 
-            //var minAge = DateTime.Today.AddYears(-userParams.MinAge - 1);
-            //var maxAge = DateTime.Today.AddYears(-userParams.MaxAge);
+            // Calculate age range for date of birth filter
             var today = DateTime.Today;
             var minDateOfBirth = today.AddYears(-userParams.MaxAge);
             var maxDateOfBirth = today.AddYears(-userParams.MinAge).AddDays(1); // Add one day to include the upper bound
 
-            users = users
-                .Where(u => u.DateOfBirth >= minDateOfBirth && u.DateOfBirth < maxDateOfBirth);
+            users = users.Where(u => u.DateOfBirth >= minDateOfBirth && u.DateOfBirth < maxDateOfBirth);
 
             // Exclude the current user from the list
             if (!string.IsNullOrEmpty(userParams.CurrentUserName))
@@ -181,22 +178,22 @@ namespace Chat.Infrastructe.Repositories
                 users = users.Where(u => u.UserName != userParams.CurrentUserName);
             }
 
-            Console.WriteLine($"Before ordering: {string.Join(", ", users.Select(u => u.LastActive))}");
-
+            // Apply sorting based on the provided order
             users = userParams.OrderBy.ToLower() switch
             {
                 "lastactive" => users.OrderByDescending(u => u.LastActive),
                 "created" => users.OrderByDescending(u => u.Created),
-                _ => users.OrderByDescending(u => u.LastActive), // Default order by LastActive if none of the cases match
+                _ => users.OrderByDescending(u => u.LastActive),
             };
 
-            Console.WriteLine($"After ordering: {string.Join(", ", users.Select(u => u.LastActive))}");
-
+            // Ensure that pageNumber is not negative
+            var pageNumber = userParams.PageNumber < 1 ? 1 : userParams.PageNumber;
 
             var memberDtos = users.Select(user => _mapper.Map<MemberDto>(user));
 
-            return Pagination<MemberDto>.Create(memberDtos.AsQueryable(), userParams.PageNumber, userParams.PageSize);
+            return Pagination<MemberDto>.Create(memberDtos.AsQueryable(), pageNumber, userParams.PageSize);
         }
+
 
 
 

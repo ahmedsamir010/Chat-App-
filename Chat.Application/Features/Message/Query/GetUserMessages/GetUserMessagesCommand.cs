@@ -1,7 +1,7 @@
-﻿using Chat.Application.Helpers.PaginationsMessages;
+﻿using Chat.Application.Helpers.Paginations;
+using Chat.Application.Helpers.PaginationsMessages;
 using Chat.Application.Presistance.Contracts;
 using Chat.Domain.Entities;
-using Chat.Infrastructe.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

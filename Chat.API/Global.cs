@@ -3,7 +3,6 @@ global using Chat.Application.Features.Accounts.Command.Register;
 global using Chat.Application.Features.Accounts.Command.RemoveFile;
 global using Chat.Application.Features.Accounts.Command.SetMainPhoto;
 global using Chat.Application.Features.Accounts.Command.UpdateCurrentUser;
-global using Chat.Application.Features.Accounts.Command.UpdatePhoto;
 global using Chat.Application.Features.Accounts.Command.VerifyEmai;
 global using Chat.Application.Features.Accounts.Query.CheckUserNameOrEmail;
 global using Chat.Application.Features.Accounts.Query.GetAllUsers;

@@ -1,5 +1,4 @@
 ﻿using Chat.Application.Helpers;
-using Chat.Application.MappingProfiles;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 namespace Chat.Application.ExtensionMethods

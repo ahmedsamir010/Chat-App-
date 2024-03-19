@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\Images\User\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="&quot;ConnectionStrings&quot;: {" /></VisualStudio></ProjectExtensions>

@@ -1,7 +1,7 @@
 ﻿using Chat.Application.Features.Like.Command;
 using Chat.Application.Helpers.PaginationLikes;
+using Chat.Application.Helpers.Paginations;
 using Chat.Domain.Entities;
-using Chat.Infrastructe.Helpers;
 
 namespace Chat.Application.Presistance.Contracts
 {
