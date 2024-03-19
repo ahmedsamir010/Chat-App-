@@ -94,7 +94,6 @@ namespace Chat.API.Controllers
                     throw;
                 }
             }
-
             public static async Task SendToPC(IClientProxy clients, string title, string content)
             {
                 try
