@@ -1,12 +1,12 @@
 ﻿
-using FirebaseAdmin.Messaging;
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Google.Apis.Services;
+using Google.Apis.FirebaseCloudMessaging.v1;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.FirebaseCloudMessaging.v1.Data;
 namespace Chat.API.Controllers
 {
     [Route("api/[controller]")]
@@ -14,100 +14,76 @@ namespace Chat.API.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public NotificationController(IMediator mediator, IHubContext<NotificationHub> hubContext)
+        public NotificationController(IMediator mediator)
         {
             _mediator = mediator;
-            _hubContext = hubContext;
         }
-        [HttpPost("SendNotificationToMobile")]
+        [HttpPost("SendNotification")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
         public async Task<ActionResult> SendNotificationToMobile(string token, string title, string content)
         {
-            try
+                
+            var result=await FirebaseHelper.SendFcmNotificationAsync(token, title, content,"");
+           
+            return Ok(result);
+        }
+        public class FirebaseHelper
+        {
+            public async static Task<bool> SendFcmNotificationAsync(string token, string? title, string? body, string? url, string? imageUrl = null)
             {
-                FirebaseApp.Create(new AppOptions
+                string credentialsPath = "private_key.json";
+
+                GoogleCredential credential;
+                using (var stream = new FileStream(credentialsPath, FileMode.Open, FileAccess.Read))
                 {
-                    Credential = GoogleCredential.FromFile("private_key.json")
+                    credential = GoogleCredential.FromStream(stream);
+                }
+                FirebaseCloudMessagingService service = new(new BaseClientService.Initializer
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = "chatnotifications"
                 });
-
-                await PushNotification.SendToMobile(token, title, content);
-
-                return Ok();
-            }
-            catch (FirebaseMessagingException ex)
-            {
-                Console.WriteLine($"FCM Error: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to send notification: Invalid registration token");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to send notification: Internal server error");
-            }
-        }
-
-        [HttpPost("SendNotificationToPC")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> SendNotificationToPC(string title, string content)
-        {
-            try
-            {
-                await PushNotification.SendToPC(_hubContext.Clients.All, title, content);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to send notification to PCs: Internal server error");
-            }
-        }
-
-        public static class PushNotification
-        {
-            public static async Task SendToMobile(string token, string title, string content)
-            {
-                try
+                var message = new Message()
                 {
-                    var message = new FirebaseAdmin.Messaging.Message
+                    Token = token,
+                    Notification = new Notification()
                     {
-                        Data = new Dictionary<string, string>
+                        Title = title,
+                        Body = body,
+                        Image = imageUrl,
+                    },
+                    Webpush = new WebpushConfig()
+                    {
+                        FcmOptions = new WebpushFcmOptions()
                         {
-                            { "title", title },
-                            { "content", content }
-                        },
-                        Token = token,
-                        Notification = new Notification
-                        {
-                            Title = title,
-                            Body = content
+                            Link = url
                         }
-                    };
+                    }
+                };
 
-                    string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
-                    Console.WriteLine("Successfully sent message to mobile: " + response);
-                }
-                catch (Exception e)
+                var sendMessageRequest = new SendMessageRequest
                 {
-                    Console.WriteLine("Error sending message to mobile: " + e.Message);
-                    throw;
-                }
-            }
-            public static async Task SendToPC(IClientProxy clients, string title, string content)
-            {
+                    Message = message,
+                };
                 try
                 {
-                    await clients.SendAsync("ReceiveNotification", title, content);
-                    Console.WriteLine("Successfully sent message to PCs via SignalR.");
+                    var response = await service.Projects.Messages.Send(sendMessageRequest, "projects/chatnotifications").ExecuteAsync();
+                    if (response.Name != null)
+                        return true;
+                    else
+                        return false;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Error sending message to PCs via SignalR: " + e.Message);
-                    throw;
+                    return false;
                 }
             }
         }
+
+
+
+
     }
 }

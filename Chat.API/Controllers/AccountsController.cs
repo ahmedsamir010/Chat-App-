@@ -5,11 +5,9 @@ using System.Security.Claims;
 
 namespace Chat.API.Controllers
 {
-    public class AccountsController(IMediator mediator, ILogger<AccountsController> logger) : BaseController(mediator)
+    public class AccountsController(IMediator mediator) : BaseController(mediator)
     {
         private readonly IMediator _mediator = mediator;
-        private readonly ILogger<AccountsController> _logger = logger;
-
         /// <summary>
         /// Handles user login with the provided login data.
         /// </summary>
