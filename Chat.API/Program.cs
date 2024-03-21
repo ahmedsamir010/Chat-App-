@@ -67,7 +67,6 @@ services.AddCors(options =>
 
     });
 });
-
 var app = builder.Build();
 //if (app.Environment.IsDevelopment())
 //{
@@ -83,6 +82,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<PresenceHub>(pattern: "hubs/presence");
 app.MapHub<MessageHub>(pattern: "hubs/message");
-app.MapHub<NotificationHub>(pattern: "hubs/notification");
 ConfigurePresistanceService.ConfigureMiddleWare(app);
 app.Run();
