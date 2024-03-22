@@ -9,7 +9,7 @@ namespace Chat.Domain.Entities
 {
     public class AppUser : IdentityUser
     {
-        public string VerificationCode { get; set; } = default!;
+        public string VerificationCode { get; set; } = "";
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;
         public DateTime DateOfBirth { get; set; }

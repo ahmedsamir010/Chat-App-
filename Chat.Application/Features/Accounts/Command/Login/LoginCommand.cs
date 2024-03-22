@@ -26,10 +26,14 @@ namespace Chat.Application.Features.Accounts.Command.Login
             public async Task<BaseCommonResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
             {
                 BaseCommonResponse response = new();
+                if (!request._loginDto.Email.Contains("@"))
+                {
+                    response.responseStatus = ResponseStatus.BadRequest;
+                    response.Message = "Invalid email address.";
+                    return response;
+                }
 
-                var user = await _userManager.Users
-                   .Include(p => p.Photos)
-                  .FirstOrDefaultAsync(x => x.Email == request._loginDto.Email);
+                var user = await _userManager.FindByEmailAsync(request._loginDto.Email);
                 
                 if (user is not null)
                 {

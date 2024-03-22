@@ -27,9 +27,10 @@ namespace Chat.Application.Features.Like.Query
             }
             public async Task<Pagination<LikeDto>> Handle(GetUsersLikeQuery request, CancellationToken cancellationToken)
             {
-                request._likesParams.UserId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                var userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                     //var currentUser=await _userManager.FindByIdAsync(userId);
-                    var users=await _likeRepository.GetUsersLikes(request._likesParams);
+                    var users=await _likeRepository.GetUsersLikes(request._likesParams, userId);
                     if(users is not null)
                     {
                         return users;

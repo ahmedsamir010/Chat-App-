@@ -17,13 +17,16 @@ namespace Chat.Application.Features.Accounts.Command.VerifyEmai
                 var user = await _userManager.FindByEmailAsync(request._verificationDto.Email);
                 if(user is not null)
                 {
-                        if(user.VerificationCode == request._verificationDto.VerificationCode)
+                    if (user.VerificationCode != null)
+                    {
+                        if (user.VerificationCode == request._verificationDto.VerificationCode)
                         {
                             user.EmailConfirmed = true;
                             await _userManager.UpdateAsync(user);
                             user.VerificationCode = string.Empty;
                             await _userManager.UpdateAsync(user);
                             return true;
+                        }
                     }
                 }
                 return false;

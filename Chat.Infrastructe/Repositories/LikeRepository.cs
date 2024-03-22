@@ -36,24 +36,24 @@ namespace Chat.Infrastructe.Repositories
         public async Task<UserLike> GetUserLike(string sourceUserId, string likedUSerId)
                 => await _dbContext.userLikes.FindAsync(sourceUserId, likedUSerId);
 
-        public async Task<Pagination<LikeDto>> GetUsersLikes(LikesParams likesParams)
+        public async Task<Pagination<LikeDto>> GetUsersLikes(LikesParams likesParams,string userId)
         {
             IQueryable<AppUser> users = _dbContext.Users.Include(x => x.Photos).OrderBy(x => x.UserName);
             IQueryable<UserLike> likes = _dbContext.userLikes.AsQueryable();
 
             if (likesParams.Predicate?.ToLower() == "follow")
             {
-                likes = likes.Where(x => x.SourceUserId == likesParams.UserId);
+                likes = likes.Where(x => x.SourceUserId == userId);
                 users = likes.Select(x => x.LikedUser);
             }
             else if (likesParams.Predicate?.ToLower() == "followby")
             {
-                likes = likes.Where(x => x.LikedUserId == likesParams.UserId);
+                likes = likes.Where(x => x.LikedUserId == userId);
                 users = likes.Select(x => x.SourceUser);
             }
             else
             {
-                likes = likes.Where(x => x.LikedUserId == likesParams.UserId);
+                likes = likes.Where(x => x.LikedUserId == userId);
                 users = likes.Select(x => x.SourceUser);
             }
             var likeDtos = users.Select(x => new LikeDto

@@ -26,6 +26,12 @@ namespace Chat.Application.Features.Accounts.Command.Register
             public async Task<BaseCommonResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
             {
                 BaseCommonResponse response = new();
+                if (!request._registerDto.Email.Contains("@"))
+                {
+                    response.responseStatus = ResponseStatus.BadRequest;
+                    response.Message = "Invalid email address.";
+                    return response;
+                }
                 var existingUser = await _userManager.FindByEmailAsync(request._registerDto.Email);
                  Random random= new();
 
