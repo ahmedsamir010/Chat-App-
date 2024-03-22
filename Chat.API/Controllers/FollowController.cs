@@ -8,7 +8,7 @@ namespace Chat.API.Controllers
         private readonly IMediator _mediator = mediator;
 
         /// <summary>
-        /// Adds a like for the specified user.
+        /// Adds a follow for the specified user.
         /// </summary>
         /// <param name="userName">The username of the user to be follow.</param>
         /// <returns>Returns an HTTP response indicating the result of the like operation.</returns>
