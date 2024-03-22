@@ -33,10 +33,12 @@ namespace Chat.Application.Features.Accounts.Validators
             //           .Matches(@"^(?=.*[A-Z])").WithMessage("Password must contain at least one uppercase letter")
             //      .Matches(@"^(?=.*[a-z])").WithMessage("Password must contain at least one lowercase letter")
             //         .Matches(@"^(?=.*\d)").WithMessage("Password must contain at least one digit");
-
             RuleFor(x => x.Gender)
                 .NotNull().WithMessage("Gender required")
-                .NotEmpty().WithMessage("Gender should not be empty");
+                .NotEmpty().WithMessage("Gender should not be empty")
+                .Must(gender => gender != null && (gender.ToLower() == "male" || gender.ToLower() == "female"))
+                    .WithMessage("Gender should be either 'Male' or 'Female'");
+
             RuleFor(x => x.DateOfBirth)
                 .NotNull().WithMessage("Date of birth required")
                 .Must(BeAValidDate).WithMessage("Invalid date of birth")

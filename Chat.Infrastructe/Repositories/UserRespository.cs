@@ -48,11 +48,13 @@ namespace Chat.Infrastructe.Repositories
         }
         public async Task<AppUser?> GetUserByNameAsync(string userName)
         {
-            var user = await _userManager.Users
+            return await _userManager.Users
                 .Include(u => u.Photos)
-                .SingleOrDefaultAsync(u => u.UserName == userName);
-            return user;
+                .FirstOrDefaultAsync(u => u.UserName == userName);
+
         }
+
+
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
             var users = await _userManager.Users
@@ -140,30 +142,21 @@ namespace Chat.Infrastructe.Repositories
         {
             var currentUser = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (currentUser is not null)
-            {
                 var user = await _userManager.FindByIdAsync(currentUser);
-
-                //if (user != null)
-                //{
-                //    userParams.Gender = user.Gender;
-                //    userParams.CurrentUserName = user.UserName;
-                //}
-            }
 
             var users = _dbContext.Users.Include(p => p.Photos).AsQueryable();
 
-            // Filter by the specified gender if provided; otherwise, use the opposite gender of the current user
-            if (!string.IsNullOrEmpty(userParams.Gender))
-            {
-                users = users.Where(u => u.Gender == userParams.Gender);
-            }
-            else
-            {
-                // Assuming there are only two genders (male and female)
-                var oppositeGender = userParams?.Gender?.ToLower() == "male" ? "female" : "male";
-                users = users.Where(u => u.Gender == oppositeGender);
-            }
+            //// Filter by the specified gender if provided; otherwise, use the opposite gender of the current user
+            //if (!string.IsNullOrEmpty(userParams.Gender))
+            //{
+            //    users = users.Where(u => u.Gender == userParams.Gender);
+            //}
+            //else
+            //{
+            //    // Assuming there are only two genders (male and female)
+            //    var oppositeGender = userParams?.Gender?.ToLower() == "male" ? "female" : "male";
+            //    users = users.Where(u => u.Gender == oppositeGender);
+            //}
 
             // Calculate age range for date of birth filter
             var today = DateTime.Today;
@@ -173,10 +166,7 @@ namespace Chat.Infrastructe.Repositories
             users = users.Where(u => u.DateOfBirth >= minDateOfBirth && u.DateOfBirth < maxDateOfBirth);
 
             // Exclude the current user from the list
-            if (!string.IsNullOrEmpty(userParams.CurrentUserName))
-            {
-                users = users.Where(u => u.UserName != userParams.CurrentUserName);
-            }
+                users = users.Where(u => u.UserName != user!.UserName);
 
             // Apply sorting based on the provided order
             users = userParams.OrderBy.ToLower() switch

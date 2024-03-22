@@ -53,7 +53,6 @@ namespace Chat.Application.Features.Message.Command.AddMessage
                 result.SenderId = userId!;
                 result.Sender = await _userManager.FindByIdAsync(userId);
                 result.SenderUserName = result.Sender.UserName;
-
                 if (recipientUser != null)
                 {
                     result.RecieptUserName = recipientUser.UserName!;
@@ -76,7 +75,6 @@ namespace Chat.Application.Features.Message.Command.AddMessage
                 await _messageRepository.AddAsync(result);
                 response.Data = new
                 {
-                    Id=result.Id,
                     senderUserName=result.SenderUserName,
                     content = result.Content,
                     senderId=result.SenderId,
@@ -84,8 +82,8 @@ namespace Chat.Application.Features.Message.Command.AddMessage
                     recieptUserName=result.RecieptUserName,
                     dateRead=result.DateRead,
                     messageSend=result.MessageSend,
-                    senderProfileUrl=result.Sender.Photos?.FirstOrDefault(x=>x.IsMain)?.Url,
-                    recipientProfileUrl = _configuration["ApiUrl:Base"] + result.Recipient?.Photos.FirstOrDefault(x => x.IsMain)?.Url
+                    //senderProfileUrl=result.Sender.Photos?.FirstOrDefault(x=>x.IsMain)?.Url,
+                    //recipientProfileUrl = _configuration["ApiUrl:Base"] + result.Recipient?.Photos.FirstOrDefault(x => x.IsMain)?.Url
                 };
                 return ResponseWithMessage(response, true, "Message created successfully");
             }
@@ -94,7 +92,8 @@ namespace Chat.Application.Features.Message.Command.AddMessage
             {
                 response.IsSuccess = success;
                 response.Message = message;
-                response.Errors = errors ?? new List<string>();
+                if(errors is not null)
+                 response.Errors = errors ?? new List<string>();
                 return response;
             }
         }

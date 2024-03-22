@@ -7,37 +7,75 @@ using System.Security.Claims;
 
 namespace Chat.Application.Features.Accounts.Command.ChangePassword
 {
-    public class ChangePasswordCommand(ChangePasswordDto changePasswordDto) : IRequest<bool>
+    public class ChangePasswordCommand : IRequest<BaseCommonResponse>
     {
-        private readonly ChangePasswordDto _changePasswordDto = changePasswordDto;
+        private readonly ChangePasswordDto _changePasswordDto;
 
-        class Handler(IHttpContextAccessor httpContext,UserManager<AppUser> userManager) : IRequestHandler<ChangePasswordCommand, bool>
+        public ChangePasswordCommand(ChangePasswordDto changePasswordDto)
         {
-            private readonly IHttpContextAccessor _httpContext = httpContext;
-            private readonly UserManager<AppUser> _userManager = userManager;
+            _changePasswordDto = changePasswordDto;
+        }
 
-            public async Task<bool> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+        class Handler : IRequestHandler<ChangePasswordCommand, BaseCommonResponse>
+        {
+            private readonly IHttpContextAccessor _httpContext;
+            private readonly UserManager<AppUser> _userManager;
+
+            public Handler(IHttpContextAccessor httpContext, UserManager<AppUser> userManager)
             {
+                _httpContext = httpContext;
+                _userManager = userManager;
+            }
+
+            public async Task<BaseCommonResponse> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+            {
+                BaseCommonResponse response = new();
                 var userIdClaim = _httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
 
                 if (userIdClaim is not null)
                 {
                     var userId = userIdClaim.Value;
                     var user = await _userManager.FindByIdAsync(userId);
-                    var result = _userManager.ChangePasswordAsync(user!, request._changePasswordDto.CurrentPassword, request._changePasswordDto.NewPassword);
-                    if (result.IsCompletedSuccessfully)
+
+                    if (user != null)
                     {
-                        return true;
+                        if (!await _userManager.IsEmailConfirmedAsync(user))
+                        {
+                            response.responseStatus = ResponseStatus.NotActivate;
+                            response.Message = "User is registered but the account is not activated.";
+                            return response;
+                        }
+
+                        var result = await _userManager.ChangePasswordAsync(user, request._changePasswordDto.CurrentPassword, request._changePasswordDto.NewPassword);
+
+                        if (result.Succeeded)
+                        {
+                            response.responseStatus = ResponseStatus.Success;
+                            response.Message = "Password has been changed.";
+                            return response;
+                        }
+                        else
+                        {
+                            response.responseStatus = ResponseStatus.BadRequest;
+                            response.Message = "Failed to change the password ... Please Try again";
+                            return response;
+                           
+                        }
                     }
                     else
                     {
-                        return false;
+                        response.responseStatus = ResponseStatus.NotFound;
+                        response.Message = "User not found.";
+                        return response;
+                       
                     }
-
                 }
                 else
                 {
-                    return false;
+                    response.responseStatus = ResponseStatus.Unauthorized;
+                    response.Message = "User claim not found.";
+                    return response;
+                  
                 }
             }
         }

@@ -24,6 +24,7 @@ namespace Chat.Application.Response
         Unauthorized,
         NotFound,
         BadRequest, 
+        NotActivate
     }
 
 }

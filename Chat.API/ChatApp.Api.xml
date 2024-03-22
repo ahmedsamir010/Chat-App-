@@ -113,27 +113,20 @@
             <param name="ct">Cancellation token to cancel the operation.</param>
             <returns>Returns an IActionResult representing the result of setting the main photo.</returns>
         </member>
-        <member name="M:Chat.API.Controllers.AccountsController.CreateMeeting(Chat.Application.Helpers.MeetingRequest)">
-            <summary>
-            Creates a Zoom meeting with the provided meeting details.
-            </summary>
-            <param name="model">The details of the meeting to be created.</param>
-            <returns>Returns the URL of the created Zoom meeting.</returns>
-        </member>
-        <member name="M:Chat.API.Controllers.LikeController.AddLike(System.String)">
+        <member name="M:Chat.API.Controllers.FollowController.AddLike(System.String)">
             <summary>
             Adds a like for the specified user.
             </summary>
-            <param name="userName">The username of the user to be liked.</param>
+            <param name="userName">The username of the user to be follow.</param>
             <returns>Returns an HTTP response indicating the result of the like operation.</returns>
         </member>
-        <member name="M:Chat.API.Controllers.LikeController.GetUsersLike(Chat.Application.Helpers.PaginationLikes.LikesParams,System.Threading.CancellationToken)">
+        <member name="M:Chat.API.Controllers.FollowController.GetUsersLike(Chat.Application.Helpers.PaginationLikes.LikesParams,System.Threading.CancellationToken)">
             <summary>
-            Retrieves a paginated list of users who have been liked by the current user.
+            Retrieves a paginated list of users who have been followed by the current user.
             </summary>
             <param name="likesParams">Parameters for pagination and filtering.</param>
             <param name="ct">Cancellation token.</param>
-            <returns>Returns an HTTP response containing a paginated list of liked users.</returns>
+            <returns>Returns an HTTP response containing a paginated list of followed users.</returns>
         </member>
         <member name="M:Chat.API.Controllers.MessageController.AddMessage(Chat.Application.Features.Message.Command.AddMessage.AddMessageDto)">
             <summary>
@@ -157,6 +150,13 @@
             <param name="userName">The username of the recipient whose read messages are to be retrieved.</param>
             <param name="ct">Cancellation token.</param>
             <returns>Returns a collection of messages read by the specified user.</returns>
+        </member>
+        <member name="M:Chat.API.Controllers.MessageController.CreateMeeting(Chat.Application.Helpers.MeetingRequest)">
+            <summary>
+            Creates a Zoom meeting with the provided meeting details.
+            </summary>
+            <param name="model">The details of the meeting to be created.</param>
+            <returns>Returns the URL of the created Zoom meeting.</returns>
         </member>
     </members>
 </doc>

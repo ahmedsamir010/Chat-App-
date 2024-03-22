@@ -22,9 +22,9 @@ namespace Chat.API.Controllers
             return response.responseStatus switch
             {
                 ResponseStatus.Success => Ok(response.Data),
-                ResponseStatus.Unauthorized => Unauthorized(response.Data),
-                ResponseStatus.NotFound => NotFound(response.Data),
-                _ => BadRequest($"Unexpected response status: {response.responseStatus}")
+                ResponseStatus.BadRequest => BadRequest(response.Message),
+                ResponseStatus.NotActivate => StatusCode(403, new ApiResponse(403, response.Message)),
+                _ => NotFound(response.Message)
             };
         }
         /// <summary>
@@ -33,18 +33,16 @@ namespace Chat.API.Controllers
         /// <param name="registerDto">The data required for user registration.</param>
         /// <returns>Returns an HTTP response containing the result of the registration operation.</returns>
         [HttpPost("Register")]
-        [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesDefaultResponseType]
         [AllowAnonymous]
-        public async Task<ActionResult<ApiResponse>> Register([FromBody] RegisterDto registerDto)
+        public async Task<ActionResult<RegisterDto>> Register([FromBody] RegisterDto registerDto)
         {
             var command = new RegisterCommand(registerDto);
             var response = await _mediator.Send(command);
             return response.responseStatus switch
             {
                 ResponseStatus.Success => Ok(response.Data),
-                ResponseStatus.BadRequest => new ApiResponse(400, response.Message, response.Errors),
-                _ => new ApiResponse(500)
+                ResponseStatus.BadRequest => BadRequest(response.Errors),
             };
         }
 
@@ -60,15 +58,20 @@ namespace Chat.API.Controllers
         /// </returns>
         [HttpPost("ChangePassword")]
         [Authorize]
-        public async Task<ActionResult<ApiResponse>> ChangePassword([FromBody]ChangePasswordDto changePasswordDto)
+        public async Task<ActionResult<ApiResponse>> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
-           var command=new ChangePasswordCommand(changePasswordDto);
+            var command = new ChangePasswordCommand(changePasswordDto);
             var response = await _mediator.Send(command);
-            if (response)
+
+            return response.responseStatus switch
             {
-                return Ok(new ApiResponse(200, "Password has been changed."));
-            }
-            return BadRequest(new ApiResponse(400, "Failed to change the password ... Please Try again"));
+                ResponseStatus.Success => Ok(new ApiResponse(200, response.Message)),
+                ResponseStatus.BadRequest => BadRequest(new ApiResponse(400, response.Message)),
+                ResponseStatus.NotActivate => StatusCode(403, new ApiResponse(403, response.Message)),
+                ResponseStatus.NotFound => NotFound(new ApiResponse(404, response.Message)),
+                ResponseStatus.Unauthorized => StatusCode(401, new ApiResponse(401, response.Message)),
+                _ => StatusCode(500, new ApiResponse(500, "Internal Server Error"))
+            };
         }
         /// <summary>
         /// Verifies the provided email address using the verification data.
@@ -134,7 +137,7 @@ namespace Chat.API.Controllers
             var users = await _mediator.Send(new GetUsersQuery(userParams), ct);
             if (users is null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404, "Not Found Users"));
             }
             Response.AddPaginationHeaders(users.CurrentPage,users.TotalPages,users.TotalCount,users.PageSize);
             return Ok(users);
@@ -163,7 +166,7 @@ namespace Chat.API.Controllers
         public async Task<ActionResult<MemberDto>> GetUserByName(string userName, CancellationToken ct)
         {
             var user = await _mediator.Send(new GetUserByNameQuery(userName), ct);
-            if (user is null) return NotFound();
+            if (user is null) return NotFound(new ApiResponse(404,"User Not Found"));
             return Ok(user);
         }
 
@@ -177,7 +180,7 @@ namespace Chat.API.Controllers
         public async Task<ActionResult<MemberDto>> GetUserByEmail(string email, CancellationToken ct)
         {
             var user = await _mediator.Send(new GetUserByEmailQuery(email), ct);
-            if (user is null) return NotFound();
+            if (user is null) return NotFound(new ApiResponse(404, "Email User Not Found"));
             return Ok(user);
         }
         /// <summary>
@@ -265,128 +268,5 @@ namespace Chat.API.Controllers
                 return NotFound("The id is not valid");
             }
         }
-        /// <summary>
-        /// Creates a Zoom meeting with the provided meeting details.
-        /// </summary>
-        /// <param name="model">The details of the meeting to be created.</param>
-        /// <returns>Returns the URL of the created Zoom meeting.</returns>
-        [AllowAnonymous]
-        [HttpPost("Create-Meeting")]
-        public async Task<IActionResult> CreateMeeting([FromBody] MeetingRequest model)
-        {
-            try
-            {
-                var accessToken = await GetZoomAccessToken(model);
-                if (string.IsNullOrEmpty(accessToken))
-                {
-                    return BadRequest("Failed to obtain Zoom access token.");
-                }
-
-                var meetingUrl = await CreateZoomMeeting(accessToken, model);
-                if (string.IsNullOrEmpty(meetingUrl))
-                {
-                    return BadRequest("Failed to create Zoom meeting.");
-                }
-
-                return Ok(new { MeetingUrl = meetingUrl });
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                return StatusCode(500, "Internal server error");
-            }
-        }
-        private async Task<string> GetZoomAccessToken(MeetingRequest model)
-        {
-            try
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    // Step 1: Encode Client ID and Client Secret
-                    string credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{"B95gfnxAS7Gyx4rAWpiv1A"}:{"psoRfbww33DFHM8lHpg3CB4cBmqQIGZD"}"));
-
-                    // Step 2: Set up API Request Header
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
-
-                    // Step 3: Set up Body of Access Token Request
-                    var tokenRequest = new Dictionary<string, string>
-           {
-               { "grant_type", "account_credentials" },
-               { "account_id", "VNr81cIxSBCPoWzExQVnnQ" }
-           };
-
-                    var content = new FormUrlEncodedContent(tokenRequest);
-
-                    // Set 'Content-Type' on the HttpContent
-                    content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
-                    // Step 4: Send POST Request to Token API
-                    var tokenEndpoint = "https://zoom.us/oauth/token";
-                    var tokenResponse = await httpClient.PostAsync(tokenEndpoint, content);
-
-                    // Step 5: Handle Successful Response
-                    if (tokenResponse.IsSuccessStatusCode)
-                    {
-                        var tokenContent = await tokenResponse.Content.ReadAsStringAsync();
-                        var accessToken = JObject.Parse(tokenContent)["access_token"]!.ToString();
-                        Console.WriteLine($"New Access Token obtained: {accessToken}");
-                        return accessToken;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Failed to obtain Zoom access token. StatusCode: {tokenResponse.StatusCode}");
-                        return "";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                Console.WriteLine($"Exception in GetZoomAccessToken: {ex.Message}");
-                return null;
-            }
-        }
-
-        private async Task<string> CreateZoomMeeting(string accessToken, MeetingRequest model)
-        {
-            using (var httpClient = new HttpClient())
-            {
-                var createMeetingEndpoint = "https://api.zoom.us/v2/users/me/meetings";
-
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-                var meetingDetails = new
-                {
-                    topic = model.Topic,
-                    type = 2, // Scheduled meeting
-                    start_time = DateTime.Now.AddMinutes(5),
-                    password = Guid.NewGuid().ToString().Substring(0, 10)
-                };
-
-                var createMeetingResponse = await httpClient.PostAsJsonAsync(createMeetingEndpoint, meetingDetails);
-                if (!createMeetingResponse.IsSuccessStatusCode)
-                {
-                    var errorContent = await createMeetingResponse.Content.ReadAsStringAsync();
-                    Console.WriteLine(errorContent); // Log the error response
-                    return "";
-                }
-                // New code to handle timer and meeting termination
-                var meetingInfo = await createMeetingResponse.Content.ReadAsStringAsync();
-                var meetingId = JObject.Parse(meetingInfo)["id"].ToString();
-
-                // Return join URL
-                var joinUrl = JObject.Parse(meetingInfo)["join_url"].ToString();
-                var uri = new Uri(joinUrl);
-                var queryParameters = System.Web.HttpUtility.ParseQueryString(uri.Query);
-                //queryParameters.Remove("pwd");
-                var uriBuilder = new UriBuilder(uri)
-                {
-                    Query = queryParameters.ToString()
-                };
-                return uriBuilder.Uri.ToString();
-            }
-        }
-
-
     }
 }

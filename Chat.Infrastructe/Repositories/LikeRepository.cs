@@ -15,14 +15,12 @@ namespace Chat.Infrastructe.Repositories
     public class LikeRepository : ILikeRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LikeRepository(ApplicationDbContext dbContext, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
+
+        public LikeRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _userManager = userManager;
-            _httpContextAccessor = httpContextAccessor;
+
         }
         public async Task<bool> AddLike(string LikedUserId, string sourceUserId)
         {
@@ -43,12 +41,17 @@ namespace Chat.Infrastructe.Repositories
             IQueryable<AppUser> users = _dbContext.Users.Include(x => x.Photos).OrderBy(x => x.UserName);
             IQueryable<UserLike> likes = _dbContext.userLikes.AsQueryable();
 
-            if (likesParams.Predicate?.ToLower() == "liked")
+            if (likesParams.Predicate?.ToLower() == "follow")
             {
                 likes = likes.Where(x => x.SourceUserId == likesParams.UserId);
                 users = likes.Select(x => x.LikedUser);
             }
-            else if (likesParams.Predicate?.ToLower() == "likedby")
+            else if (likesParams.Predicate?.ToLower() == "followby")
+            {
+                likes = likes.Where(x => x.LikedUserId == likesParams.UserId);
+                users = likes.Select(x => x.SourceUser);
+            }
+            else
             {
                 likes = likes.Where(x => x.LikedUserId == likesParams.UserId);
                 users = likes.Select(x => x.SourceUser);
@@ -61,18 +64,9 @@ namespace Chat.Infrastructe.Repositories
                 lastName = x.LastName,
                 photoUrl = x.Photos.FirstOrDefault(x=>x.IsMain)!.Url
             });
-
             return Pagination<LikeDto>.Create(likeDtos, likesParams.PageNumber, likesParams.PageSize);
         }
        
-        public async Task<AppUser> GetUserWithLike(string userId)
-        {
-            var user = await _dbContext.Users
-                .Include(x => x.Likeduser)
-                .FirstOrDefaultAsync(x => x.Id == userId);
-            if (user is not null) return user;
-            else return null;
-        }
 
     }
 }

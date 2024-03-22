@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Chat.Application.Features.Accounts.Query.GetAllUsers;
 using Chat.Application.Presistance.Contracts;
+using Chat.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 namespace Chat.Application.Features.Accounts.Query.GetUserByName
 {
     public class GetUserByNameQuery(string username) : IRequest<MemberDto>
@@ -18,8 +20,12 @@ namespace Chat.Application.Features.Accounts.Query.GetUserByName
                 if(!string.IsNullOrEmpty(request.Username))
                 {
                 var user = await _userRepository.GetUserByNameAsync(request.Username);
+
                     if (user is not null)
-                        return _mapper.Map<MemberDto>(user);
+                    {
+                        var mappedUser= _mapper.Map<MemberDto>(user);
+                        return mappedUser;
+                    }
                 }
                 return null;
 

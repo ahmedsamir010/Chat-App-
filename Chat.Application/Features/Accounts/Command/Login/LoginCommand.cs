@@ -30,9 +30,15 @@ namespace Chat.Application.Features.Accounts.Command.Login
                 var user = await _userManager.Users
                    .Include(p => p.Photos)
                   .FirstOrDefaultAsync(x => x.Email == request._loginDto.Email);
-
+                
                 if (user is not null)
                 {
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        response.responseStatus = ResponseStatus.NotActivate;
+                        response.Message = "User is registered but the account is not activated.";
+                        return response;
+                    }
                     var result = await _signinmanager.CheckPasswordSignInAsync(user, request._loginDto.Password, false);
 
                     if (result.Succeeded)
@@ -44,17 +50,13 @@ namespace Chat.Application.Features.Accounts.Command.Login
                         response.Message = "Login successful.";
                         response.Data = new
                         {
-                            user.FirstName,
-                            user.LastName,
-                            user.Email,
                             Token = _tokenService.CreateAsync(user).Result,
                             PhotoUrl = mainActivePhoto?.Url != null ? apiUrlBase + mainActivePhoto.Url : string.Empty,
-                            user.Gender
                         };
                         return response;
                     }
 
-                    response.responseStatus = ResponseStatus.Unauthorized;
+                    response.responseStatus = ResponseStatus.BadRequest;
                     response.Message = "Invalid email or password.";
                     return response;
                 }

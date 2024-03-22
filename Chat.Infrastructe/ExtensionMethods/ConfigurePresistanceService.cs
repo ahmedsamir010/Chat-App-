@@ -88,6 +88,7 @@ namespace Chat.Infrastructe.ExtensionMethods
                 await IdentitySeed.SeedUserAsync(userManager, roleManager);
             }
         }
+
         public class CustomUserValidator<TUser> : IUserValidator<TUser> where TUser : class
         {
             public Task<IdentityResult> ValidateAsync(UserManager<TUser> manager, TUser user)
