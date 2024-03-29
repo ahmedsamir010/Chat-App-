@@ -16,24 +16,14 @@ using System.Security.Claims;
 namespace Chat.API.signalR
 {
     [Authorize]
-    public class MessageHub : Hub
+    public class MessageHub(IHubContext<PresenceHub> precencehub, ApplicationDbContext dbContext, IMessageRepository messageRepository, UserManager<AppUser> userManager, IMapper mapper) : Hub
     {
-        private readonly IHubContext<PresenceHub> _precencehub;
-        private readonly ApplicationDbContext _dbContext;
-        private readonly IMessageRepository _messageRepository;
-        private readonly IMapper _mapper;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IMediator _mediator;
+        private readonly IHubContext<PresenceHub> _precencehub = precencehub;
+        private readonly ApplicationDbContext _dbContext = dbContext;
+        private readonly IMessageRepository _messageRepository = messageRepository;
+        private readonly IMapper _mapper = mapper;
+        private readonly UserManager<AppUser> _userManager = userManager;
 
-        public MessageHub(IHubContext<PresenceHub> precencehub, ApplicationDbContext dbContext, IMessageRepository messageRepository, IMapper mapper, UserManager<AppUser> userManager, IMediator mediator)
-        {
-            _precencehub = precencehub;
-            _dbContext = dbContext;
-            _messageRepository = messageRepository;
-            _mapper = mapper;
-            _userManager = userManager;
-            _mediator = mediator;
-        }
         public override async Task OnConnectedAsync()
         {
             var userId = Context?.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;

@@ -18,6 +18,13 @@
             <param name="registerDto">The data required for user registration.</param>
             <returns>Returns an HTTP response containing the result of the registration operation.</returns>
         </member>
+        <member name="M:Chat.API.Controllers.AccountsController.VerifyEmail(Chat.Application.Features.Accounts.Command.VerifyEmai.VerificationDto)">
+            <summary>
+            Verifies the provided email address using the verification data.
+            </summary>
+            <param name="verificationDto">The data containing email address and verification code.</param>
+            <returns>Returns an indication of whether the email verification was successful or not.</returns>
+        </member>
         <member name="M:Chat.API.Controllers.AccountsController.ChangePassword(Chat.Application.Features.Accounts.Command.ChangePassword.ChangePasswordDto)">
             <summary>
             Changes the password of the authenticated user.
@@ -28,13 +35,6 @@
             If the password change is successful, returns HTTP 200 with a success message.
             If the password change fails, returns HTTP 400 with an error message.
             </returns>
-        </member>
-        <member name="M:Chat.API.Controllers.AccountsController.VerifyEmail(Chat.Application.Features.Accounts.Command.VerifyEmai.VerificationDto)">
-            <summary>
-            Verifies the provided email address using the verification data.
-            </summary>
-            <param name="verificationDto">The data containing email address and verification code.</param>
-            <returns>Returns an indication of whether the email verification was successful or not.</returns>
         </member>
         <member name="M:Chat.API.Controllers.AccountsController.GetCurrentUser(System.Threading.CancellationToken)">
             <summary>
@@ -144,10 +144,11 @@
             <returns>Returns a paginated list of messages belonging to the current user.</returns>
         </member>
         <member name="M:Chat.API.Controllers.MessageController.GetMessageRead(System.String,System.Threading.CancellationToken)">
+            <summary></summary>
             <summary>
             Retrieves messages read by the specified user.
             </summary>
-            <param name="userName">The username of the recipient whose read messages are to be retrieved.</param>
+            <param name="RecipentUserName">The username of the recipient whose read messages are to be retrieved.</param>
             <param name="ct">Cancellation token.</param>
             <returns>Returns a collection of messages read by the specified user.</returns>
         </member>

@@ -15,7 +15,7 @@ namespace Chat.Application.Presistance.Contracts
         Task<Pagination<MessageDto>> GetUserMessagesAsync(UserMessagesParams userMessages);
 
         Task<IEnumerable<MessageDto>> GetUserMessagesReadAsync(string currentUserName,string recipentuserName);
-        Task MarkMessagesAsRead(string currentUserName, string senderUserName);
+        //Task MarkMessagesAsRead(string currentUserName, string senderUserName);
 
         Task<Group> GetMessageGroup(string groupName);
         void RemoveConnection(connection connection);

@@ -21,8 +21,11 @@ namespace Chat.Application.Features.Message.Query.GetMessageUserRead
             {
                 var userId=_httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(x=>x.Type==ClaimTypes.NameIdentifier)?.Value;
                 var userName=await _userManager.FindByIdAsync(userId!);
+                if(userName is not null)
+                {
                 var query = await _messageRepository.GetUserMessagesReadAsync(userName!.UserName!, request.RecipentUserName);
                 if (query is not null) return query;
+                }
                 return null;
             }
         }

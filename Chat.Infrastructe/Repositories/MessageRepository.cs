@@ -58,35 +58,44 @@ namespace Chat.Infrastructe.Repositories
 
             query = userMessages.container.ToLower() switch
             {
-                "outbox" => query.Where(x => x.SenderUserName == userMessages.userName),
-                "inbox" => query.Where(x => x.RecieptUserName == userMessages.userName),
-                _ => query.Where(x => x.RecieptUserName == userMessages.userName && x.DateRead == null),
+                "outbox" => query.Where(x => x.SenderUserName == userMessages.CurrentuserName),
+                "inbox" => query.Where(x => x.RecieptUserName == userMessages.CurrentuserName),
+                _ => query.Where(x => x.RecieptUserName == userMessages.CurrentuserName && x.DateRead == null),
             };
             var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
             return Pagination<MessageDto>.Create(messages,userMessages.PageNumber,userMessages.PageSize);
         }
 
-        public async Task<IEnumerable<MessageDto>> GetUserMessagesReadAsync(string currentUserName, string recipentuserName)
+        public async Task<IEnumerable<MessageDto>> GetUserMessagesReadAsync(string currentUserName, string recipientUserName)
         {
+            // Retrieves messages sent between two users.
+
+            // Include related entities (Sender and Recipient) to avoid lazy loading.
             var messages = _dbContext.Messages
-                                   .Include(x => x.Sender).ThenInclude(x => x.Photos)
-                                   .Include(x => x.Recipient).ThenInclude(x => x.Photos)
-                                   .Where(x=>x.Recipient.UserName == currentUserName
-                                          && x.Sender.UserName == recipentuserName || x.Recipient.UserName == recipentuserName
-                                          && x.Sender.UserName == currentUserName).OrderByDescending(x=>x.MessageSend).ToList();
+                .Include(x => x.Sender).ThenInclude(x => x.Photos)
+                .Include(x => x.Recipient).ThenInclude(x => x.Photos)
+                .Where(x =>
+                    (x.Recipient.UserName == currentUserName && x.Sender.UserName == recipientUserName) || // Messages from current user to recipient
+                    (x.Recipient.UserName == recipientUserName && x.Sender.UserName == currentUserName)) // Messages from recipient to current user
+                .OrderByDescending(x => x.MessageSend)
+                .ToList();
 
-            var unReadMessage = messages.Where(x => x.DateRead == null && x.Recipient.UserName == currentUserName).ToList();
+            // Identify unread messages sent to the current user.
+            var unreadMessages = messages.Where(x => x.DateRead == null && x.Recipient.UserName == currentUserName).ToList();
 
-            if (unReadMessage.Any())
+            // Mark unread messages as read and save changes to the database.
+            if (unreadMessages.Any())
             {
-                foreach (var item in unReadMessage)
+                foreach (var message in unreadMessages)
                 {
-                    item.DateRead = DateTime.UtcNow;
-                    //_dbContext.Messages.Update(item);
+                    message.DateRead = DateTime.UtcNow;
+                    //_dbContext.Messages.Update(message); // No need to update explicitly, context tracks changes.
                 }
-                   await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
             }
-           return _mapper.Map<IEnumerable<MessageDto>>(messages);
+
+            // Map messages to DTOs and return the result.
+            return _mapper.Map<IEnumerable<MessageDto>>(messages);
         }
     }
 }

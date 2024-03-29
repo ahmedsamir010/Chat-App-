@@ -27,7 +27,7 @@ namespace Chat.Application.Features.Message.Query.GetUserMessages
                     var user=await _userManager.FindByIdAsync(userId);
                     if(user is not null)
                     {
-                        request._messagesParams.userName = user.UserName!;
+                        request._messagesParams.CurrentuserName = user.UserName!;
                     }
                 }
                 var messages = await _messageRepository.GetUserMessagesAsync(request._messagesParams);

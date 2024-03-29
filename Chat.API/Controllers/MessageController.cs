@@ -39,17 +39,24 @@ namespace Chat.API.Controllers
             }
             return NotFound("No Message");
         }
+        /// <summary></summary>
+
+
 
         /// <summary>
         /// Retrieves messages read by the specified user.
         /// </summary>
-        /// <param name="userName">The username of the recipient whose read messages are to be retrieved.</param>
+        /// <param name="RecipentUserName">The username of the recipient whose read messages are to be retrieved.</param>
         /// <param name="ct">Cancellation token.</param>
         /// <returns>Returns a collection of messages read by the specified user.</returns>
-        [HttpGet("Get-message-read/{userName}")]
-        public async Task<ActionResult<MessageDto>> GetMessageRead(string userName, CancellationToken ct)
+        [HttpGet("Get-message-read/{RecipentUserName}")]
+        public async Task<ActionResult<MessageDto>> GetMessageRead(string RecipentUserName, CancellationToken ct)
         {
-            var query = await _mediator.Send(new GetMessageUserReadQuery(userName), ct);
+            var query = await _mediator.Send(new GetMessageUserReadQuery(RecipentUserName), ct);
+            if(query is null)
+            {
+                return NotFound("User Not Found");
+            }
             if (query is not null)
             {
                 return Ok(query);
@@ -63,7 +70,7 @@ namespace Chat.API.Controllers
         /// </summary>
         /// <param name="model">The details of the meeting to be created.</param>
         /// <returns>Returns the URL of the created Zoom meeting.</returns>
-        [AllowAnonymous]
+       // [AllowAnonymous]
         [HttpPost("Create-Meeting")]
         public async Task<IActionResult> CreateMeeting([FromBody] MeetingRequest model)
         {
@@ -122,7 +129,7 @@ namespace Chat.API.Controllers
                     {
                         var tokenContent = await tokenResponse.Content.ReadAsStringAsync();
                         var accessToken = JObject.Parse(tokenContent)["access_token"]!.ToString();
-                        Console.WriteLine($"New Access Token obtained: {accessToken}");
+                        
                         return accessToken;
                     }
                     else
@@ -135,8 +142,7 @@ namespace Chat.API.Controllers
             catch (Exception ex)
             {
                 // Log the exception
-                Console.WriteLine($"Exception in GetZoomAccessToken: {ex.Message}");
-                return null;
+               return null;
             }
         }
 

@@ -46,6 +46,26 @@ namespace Chat.API.Controllers
             };
         }
 
+        /// <summary>
+        /// Verifies the provided email address using the verification data.
+        /// </summary>
+        /// <param name="verificationDto">The data containing email address and verification code.</param>
+        /// <returns>Returns an indication of whether the email verification was successful or not.</returns>
+
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesDefaultResponseType]
+        [AllowAnonymous]
+        [HttpPost("Verify-Email")]
+        public async Task<IActionResult> VerifyEmail(VerificationDto verificationDto)
+        {
+            var command = new VerifyEmailCommand(verificationDto);
+            var response = await _mediator.Send(command);
+            if (response is true)
+            {
+                return Ok("Email Verification");
+            }
+            return BadRequest("Faild to verify");
+        }
 
         /// <summary>
         /// Changes the password of the authenticated user.
@@ -73,26 +93,7 @@ namespace Chat.API.Controllers
                 _ => StatusCode(500, new ApiResponse(500, "Internal Server Error"))
             };
         }
-        /// <summary>
-        /// Verifies the provided email address using the verification data.
-        /// </summary>
-        /// <param name="verificationDto">The data containing email address and verification code.</param>
-        /// <returns>Returns an indication of whether the email verification was successful or not.</returns>
-
-        [ProducesResponseType(typeof(ApiResponse), 200)]
-        [ProducesDefaultResponseType]
-        [AllowAnonymous]
-        [HttpPost("Verify-Email")]
-        public async Task<IActionResult> VerifyEmail(VerificationDto verificationDto)
-        {
-            var command = new VerifyEmailCommand(verificationDto);
-            var response= await _mediator.Send(command);
-            if(response is true)
-            {
-                return Ok("Email Verification");
-            }
-            return BadRequest("Faild to verify");
-        }
+    
 
         /// <summary>
         /// Retrieves the details of the currently authenticated user.

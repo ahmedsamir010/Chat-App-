@@ -64,7 +64,7 @@ namespace Chat.Application.Features.Accounts.Command.Register
                         LastName = user.LastName,
                         Email = user.Email,
                         PhotoUrl = mainActivePhoto?.Url != null ? apiUrlBase + mainActivePhoto.Url : string.Empty,
-                        Token = _tokenService.CreateAsync(user).Result,
+                        //Token = _tokenService.CreateAsync(user).Result,
                         Gender=user.Gender
                     };
                     response.responseStatus = ResponseStatus.Success;
