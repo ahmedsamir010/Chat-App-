@@ -1,8 +1,4 @@
-﻿using Chat.Application.Features.Message.Query.GetUserMessages;
-using Chat.Application.Helpers.Paginations;
-using Chat.Application.Helpers.PaginationsMessages;
-using Chat.Domain.Entities;
-namespace Chat.Application.Presistance.Contracts
+﻿namespace Chat.Application.Presistance.Contracts
 {
     public interface IMessageRepository : IGenericRepository<Message>
     {

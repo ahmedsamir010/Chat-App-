@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.IO;
-
 namespace Chat.Application.Helpers.FileSettings
 {
     public static class ManageFile

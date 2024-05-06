@@ -1,7 +1,5 @@
 ﻿using System.Net.Mail;
 using System.Net;
-using Chat.Application.Models;
-
 namespace Chat.Application.Helpers
 {
     public class EmailService

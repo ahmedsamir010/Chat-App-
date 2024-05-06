@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Presistance;
-using MediatR;
-namespace Chat.Application.Features.Comment.Query.GetComments
+﻿namespace Chat.Application.Features.Comment.Query.GetComments
 {
     public class GetCommentsForPostQuery(int postId) : IRequest<IEnumerable<CommentsDto>>
     {

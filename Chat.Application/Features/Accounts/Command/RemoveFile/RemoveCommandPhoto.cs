@@ -1,6 +1,4 @@
-﻿using Chat.Application.Presistance.Contracts;
-using MediatR;
-namespace Chat.Application.Features.Accounts.Command.RemoveFile
+﻿namespace Chat.Application.Features.Accounts.Command.RemoveFile
 {
     public class RemoveCommandPhoto(int id) : IRequest<bool>
     {

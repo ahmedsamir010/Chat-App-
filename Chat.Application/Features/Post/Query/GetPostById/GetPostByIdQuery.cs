@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Features.Post.Query.GetAllPost;
-using Chat.Application.Presistance;
-using MediatR;
-namespace Chat.Application.Features.Post.Query.GetPostById
+﻿namespace Chat.Application.Features.Post.Query.GetPostById
 {
     public class GetPostByIdQuery(int id) : IRequest<ReturnPostDto?>
     {

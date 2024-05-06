@@ -1,7 +1,4 @@
-﻿using Chat.Application.Helpers.Paginations;
-using Chat.Application.Helpers.PaginationsMessages;
-using Chat.Application.Presistance.Contracts;
-using MediatR;
+﻿using Chat.Application.Helpers.PaginationsMessages;
 namespace Chat.Application.Features.Message.Query.GetUserMessages
 {
     public class GetUserMessagesCommand(UserMessagesParams messagesParams) : IRequest<Pagination<MessageDto>>

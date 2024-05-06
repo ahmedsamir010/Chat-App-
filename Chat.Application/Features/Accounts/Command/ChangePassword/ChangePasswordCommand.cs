@@ -1,11 +1,4 @@
-﻿using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-
-namespace Chat.Application.Features.Accounts.Command.ChangePassword
+﻿namespace Chat.Application.Features.Accounts.Command.ChangePassword
 {
     public class ChangePasswordCommand : IRequest<BaseCommonResponse>
     {

@@ -1,8 +1,4 @@
-﻿using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-
-namespace Chat.Application.Features.Accounts.Command.VerifyEmai
+﻿namespace Chat.Application.Features.Accounts.Command.VerifyEmai
 {
     public class VerifyEmailCommand(VerificationDto verificationDto) : IRequest<bool>
     {

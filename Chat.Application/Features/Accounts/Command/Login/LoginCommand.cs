@@ -1,23 +1,13 @@
-﻿using AutoMapper;
-using Chat.Application.Features.Accounts.Query.GetCurrentUser;
-using Chat.Application.Presistance.Contracts;
-using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
-namespace Chat.Application.Features.Accounts.Command.Login
+﻿namespace Chat.Application.Features.Accounts.Command.Login
 {
     public class LoginCommand(LoginDto loginDto) : IRequest<BaseCommonResponse>
     {
         public LoginDto LoginDto { get; set; } = loginDto;
     }
 
-    public class Handler(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IConfiguration configuration, IMapper mapper) : IRequestHandler<LoginCommand, BaseCommonResponse>
+    public class Handler(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager, ITokenService tokenService, IConfiguration configuration, IMapper mapper) : IRequestHandler<LoginCommand, BaseCommonResponse>
     {
         private readonly UserManager<AppUser> _userManager = userManager;
-        private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly SignInManager<AppUser> _signInManager = signInManager;
         private readonly ITokenService _tokenService = tokenService;
         private readonly IConfiguration _configuration = configuration;

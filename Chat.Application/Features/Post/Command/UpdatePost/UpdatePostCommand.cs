@@ -1,13 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Helpers.FileSettings;
-using Chat.Application.Presistance;
-using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-namespace Chat.Application.Features.Post.Command.UpdatePost
+﻿namespace Chat.Application.Features.Post.Command.UpdatePost
 {
     public class UpdatePostCommand(UpdatePostDto updatePostDto) : IRequest<BaseCommonResponse>
     {

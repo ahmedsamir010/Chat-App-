@@ -1,9 +1,4 @@
-﻿using Chat.Application.Presistance.Contracts;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-
-namespace Chat.Application.Features.Accounts.Command.SetMainPhoto
+﻿namespace Chat.Application.Features.Accounts.Command.SetMainPhoto
 {
     public class SetMainPhotoCommand(int id) : IRequest<bool>
     {

@@ -1,14 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Features.Accounts.Validators;
-using Chat.Application.Helpers;
-using Chat.Application.Models;
-using Chat.Application.Presistance.Contracts;
-using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-namespace Chat.Application.Features.Accounts.Command.Register
+﻿namespace Chat.Application.Features.Accounts.Command.Register
 {
     public class RegisterCommand(RegisterDto registerDto) : IRequest<BaseCommonResponse>
     {

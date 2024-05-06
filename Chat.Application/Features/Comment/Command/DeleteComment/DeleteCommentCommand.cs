@@ -1,13 +1,4 @@
-﻿using Chat.Application.Features.Post.Command.DeletePost;
-using Chat.Application.Helpers.FileSettings;
-using Chat.Application.Presistance;
-using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-namespace Chat.Application.Features.Comment.Command.DeleteComment
+﻿namespace Chat.Application.Features.Comment.Command.DeleteComment
 {
     public class DeleteCommentCommand(int id) : IRequest<BaseCommonResponse>
     {
@@ -18,7 +9,6 @@ namespace Chat.Application.Features.Comment.Command.DeleteComment
             private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
             private readonly UserManager<AppUser> _userManager = userManager;
             private readonly IWebHostEnvironment _webHost = webHost;
-
             public async Task<BaseCommonResponse> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
             {
                 BaseCommonResponse Response = new();

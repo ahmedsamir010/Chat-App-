@@ -1,15 +1,4 @@
-﻿using Chat.Application.Helpers.FileSettings;
-using Chat.Application.Presistance;
-using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Chat.Application.Features.Post.Command.DeletePost
+﻿namespace Chat.Application.Features.Post.Command.DeletePost
 {
     public class DeletePostCommand(int id) : IRequest<BaseCommonResponse>
     {

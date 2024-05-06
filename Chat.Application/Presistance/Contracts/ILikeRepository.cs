@@ -1,9 +1,4 @@
-﻿using Chat.Application.Features.Like.Command;
-using Chat.Application.Helpers.PaginationLikes;
-using Chat.Application.Helpers.Paginations;
-using Chat.Domain.Entities;
-
-namespace Chat.Application.Presistance.Contracts
+﻿namespace Chat.Application.Presistance.Contracts
 {
     public interface ILikeRepository
     {

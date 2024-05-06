@@ -1,11 +1,4 @@
-﻿using Chat.Application.Presistance.Contracts;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-
-namespace Chat.Application.Features.Accounts.Query.GetCurrentUser
+﻿namespace Chat.Application.Features.Accounts.Query.GetCurrentUser
 {
     public class GetCurrentUserQuery : IRequest<UserDto>
     {

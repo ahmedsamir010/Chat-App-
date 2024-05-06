@@ -1,9 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Helpers.PaginationsMessages;
-using Chat.Application.Presistance.Contracts;
-using MediatR;
-
-namespace Chat.Application.Features.Message.Query.GetAllMessages
+﻿namespace Chat.Application.Features.Message.Query.GetAllMessages
 {
     public class GetAllMessageQuery:IRequest<List<MessageReturnDto>>
     {

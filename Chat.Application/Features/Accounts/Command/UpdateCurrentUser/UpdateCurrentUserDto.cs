@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Chat.Application.Features.Accounts.Command.UpdateCurrentUser
+﻿namespace Chat.Application.Features.Accounts.Command.UpdateCurrentUser
 {
     public class UpdateCurrentUserDto
     {

@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Chat.Application.Helpers.Paginations
+﻿namespace Chat.Application.Helpers.Paginations
 {
     public class Pagination<T> : List<T>
     {

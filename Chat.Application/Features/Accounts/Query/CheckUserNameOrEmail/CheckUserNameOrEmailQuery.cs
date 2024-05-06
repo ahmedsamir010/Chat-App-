@@ -1,7 +1,4 @@
-﻿using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-namespace Chat.Application.Features.Accounts.Query.CheckUserNameOrEmail
+﻿namespace Chat.Application.Features.Accounts.Query.CheckUserNameOrEmail
 {
     public class CheckUserNameOrEmailQuery(string searchTerm) : IRequest<bool>
     {

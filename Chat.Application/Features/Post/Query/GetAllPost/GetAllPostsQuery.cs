@@ -1,10 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Presistance;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 namespace Chat.Application.Features.Post.Query.GetAllPost
 {
     public class GetAllPostsQuery : IRequest<IEnumerable<ReturnPostDto?>>

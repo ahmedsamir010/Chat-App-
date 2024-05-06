@@ -1,11 +1,4 @@
-﻿using Chat.Application.Features.Message.Query.GetUserMessages;
-using Chat.Application.Presistance.Contracts;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-namespace Chat.Application.Features.Message.Query.GetMessageUserRead
+﻿namespace Chat.Application.Features.Message.Query.GetMessageUserRead
 {
     public class GetMessageUserReadQuery(string recipentUserName) : IRequest<IEnumerable<MessageDto>>
     {

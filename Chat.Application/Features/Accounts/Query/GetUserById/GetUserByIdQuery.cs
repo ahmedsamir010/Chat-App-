@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Features.Accounts.Query.GetAllUsers;
-using Chat.Application.Presistance.Contracts;
-using MediatR;
-namespace Chat.Application.Features.Accounts.Query.GetUserById
+﻿namespace Chat.Application.Features.Accounts.Query.GetUserById
 {
     public class GetUserByIdQuery(string Id) : IRequest<MemberDto>
     {

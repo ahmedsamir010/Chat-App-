@@ -1,7 +1,4 @@
-﻿using Chat.Application.Presistance.Contracts;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-namespace Chat.Application.Features.Accounts.Command.UpdateFile
+﻿namespace Chat.Application.Features.Accounts.Command.UpdateFile
 {
     public class UpdateFileCommand(IFormFile File) : IRequest<bool>
     {

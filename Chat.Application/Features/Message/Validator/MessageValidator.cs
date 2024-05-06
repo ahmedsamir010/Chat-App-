@@ -1,11 +1,4 @@
-﻿using Chat.Application.Features.Message.Command.AddMessage;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using FluentValidation;
 namespace Chat.Application.Features.Message.Validator
 {
     public class MessageValidator : AbstractValidator<AddMessageDto>

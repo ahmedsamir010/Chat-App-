@@ -1,12 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Helpers.FileSettings;
-using Chat.Application.Presistance;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-namespace Chat.Application.Features.Comment.Command.AddComment
+﻿namespace Chat.Application.Features.Comment.Command.AddComment
 {
     public class AddCommentCommand(AddCommentDto addCommentDto) : IRequest<bool>
     {

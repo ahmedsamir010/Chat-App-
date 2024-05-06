@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-namespace Chat.Application.Features.Comment.Command.UpdateComment
+﻿namespace Chat.Application.Features.Comment.Command.UpdateComment
 {
     public class UpdateCommentDto
     {

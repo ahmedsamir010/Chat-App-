@@ -1,9 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Features.Post.Command.AddPost;
-using Chat.Domain.Entities;
-using Microsoft.Extensions.Configuration;
-
-namespace Chat.Application.Helpers.Resolver
+﻿namespace Chat.Application.Helpers.Resolver
 {
     public class PostPhotoResolver : IValueResolver<Post, AddPostDto, string>
     {

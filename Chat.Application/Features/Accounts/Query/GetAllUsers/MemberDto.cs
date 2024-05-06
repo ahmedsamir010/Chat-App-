@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-namespace Chat.Application.Features.Accounts.Query.GetAllUsers
+﻿namespace Chat.Application.Features.Accounts.Query.GetAllUsers
 {
     public class MemberDto
     {

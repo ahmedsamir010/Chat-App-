@@ -1,15 +1,4 @@
-﻿using Chat.Application.Features.Accounts.Command.ChangePassword;
-using Chat.Application.Presistance;
-using Chat.Application.Presistance.Contracts;
-using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-
-namespace Chat.Application.Features.Accounts.Command.DeleteProfile
+﻿namespace Chat.Application.Features.Accounts.Command.DeleteProfile
 {
     public class BlockProfileCommand(BlockProfileDto blockProfileDto) : IRequest<BaseCommonResponse>
     {

@@ -1,10 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Features.Accounts.Query.GetAllUsers;
-using Chat.Application.Presistance.Contracts;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-namespace Chat.Application.Features.Accounts.Query.GetUserByName
+﻿namespace Chat.Application.Features.Accounts.Query.GetUserByName
 {
     public class GetUserByNameQuery(string username) : IRequest<MemberDto>
     {

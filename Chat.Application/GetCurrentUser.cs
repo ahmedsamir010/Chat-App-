@@ -1,8 +1,4 @@
-﻿using Chat.Domain.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-namespace Chat.Application
+﻿namespace Chat.Application
 {
     public class CurrentUserProvider
     {

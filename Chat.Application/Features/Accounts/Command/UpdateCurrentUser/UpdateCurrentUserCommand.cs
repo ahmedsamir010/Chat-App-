@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-namespace Chat.Application.Features.Accounts.Command.UpdateCurrentUser
+﻿namespace Chat.Application.Features.Accounts.Command.UpdateCurrentUser
 {
     public class UpdateCurrentUserCommand(UpdateCurrentUserDto updateCurrentUserDto) : IRequest<BaseCommonResponse>
     {

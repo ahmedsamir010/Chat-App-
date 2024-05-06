@@ -1,14 +1,5 @@
-﻿using AutoMapper;
-using Chat.Application.Features.Message.Validator;
-using Chat.Application.Presistance.Contracts;
-using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Chat.Application.Features.Message.Validator;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.Security.Claims;
 namespace Chat.Application.Features.Message.Command.AddMessage
 {
     public class AddMessageCommand(AddMessageDto messageDto) : IRequest<BaseCommonResponse>

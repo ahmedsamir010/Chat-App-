@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Helpers.Paginations;
-using Chat.Application.Presistance.Contracts;
-using MediatR;
-namespace Chat.Application.Features.Accounts.Query.GetAllUsers
+﻿namespace Chat.Application.Features.Accounts.Query.GetAllUsers
 {
     public class GetUsersQuery(UserParams userParams) : IRequest<Pagination<MemberDto>>
     {

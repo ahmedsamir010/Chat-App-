@@ -1,7 +1,4 @@
-﻿using Chat.Domain.Entities;
-using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
-
+﻿using System.ComponentModel.DataAnnotations;
 namespace Chat.Application.Features.Post.Command.AddPost
 {
     public class AddPostDto

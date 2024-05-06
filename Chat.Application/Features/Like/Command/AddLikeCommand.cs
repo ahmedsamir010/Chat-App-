@@ -1,11 +1,4 @@
-﻿using Chat.Application.Presistance.Contracts;
-using Chat.Application.Response;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-namespace Chat.Application.Features.Like.Command
+﻿namespace Chat.Application.Features.Like.Command
 {
     public class AddLikeCommand(string userName) : IRequest<BaseCommonResponse>
     {

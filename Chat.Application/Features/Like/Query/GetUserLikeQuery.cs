@@ -1,13 +1,5 @@
 ﻿using Chat.Application.Features.Like.Command;
 using Chat.Application.Helpers.PaginationLikes;
-using Chat.Application.Helpers.Paginations;
-using Chat.Application.Presistance.Contracts;
-using Chat.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-
 namespace Chat.Application.Features.Like.Query
 {
     public class GetUsersLikeQuery(LikesParams likesParams) : IRequest<Pagination<LikeDto>>

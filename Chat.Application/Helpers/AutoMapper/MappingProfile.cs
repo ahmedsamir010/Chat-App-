@@ -1,24 +1,4 @@
-﻿using AutoMapper;
-using Chat.Application.Features.Accounts.Query.GetAllUsers;
-using Chat.Application.Features.Message.Query.GetAllMessages;
-using Chat.Domain.Entities;
-using Chat.Application.ExtensionMethods;
-using Chat.Application.Features.Accounts.Command.UpdateCurrentUser;
-using Chat.Application.Features.Accounts.Command.Register;
-using Chat.Application.Features.Message.Command.AddMessage;
-using Chat.Application.Features.Message.Query.GetUserMessages;
-using Chat.Application.Features.Accounts.Command.DeleteProfile;
-using Chat.Application.Features.Accounts.Query.GetCurrentUser;
-using Chat.Application.Features.Accounts.Query.GetAllBlockedUser;
-using Chat.Application.Helpers.Resolver;
-using Chat.Application.Features.Post.Command.AddPost;
-using Chat.Application.Features.Post.Query.GetAllPost;
-using Chat.Application.Features.Post.Command.UpdatePost;
-using Chat.Application.Features.Comment.Command.AddComment;
-using Chat.Application.Features.Comment.Query.GetComments;
-using Chat.Application.Features.Comment.Command.UpdateComment;
-
-namespace Chat.Application.Helpers.AutoMapper
+﻿namespace Chat.Application.Helpers.AutoMapper
 {
     public class MappingProfile : Profile
     {
@@ -82,7 +62,7 @@ namespace Chat.Application.Helpers.AutoMapper
         {
             var today = DateTime.Today;
             var age = today.Year - dateOfBirth.Year;
-            if (dateOfBirth.Date > today.AddYears(-age)) age--; // Adjust age if birthday hasn't occurred yet this year
+            if (dateOfBirth.Date > today.AddYears(-age)) age--; 
             return age;
         }
         private static string MapProfileUrl(AppUser user)
