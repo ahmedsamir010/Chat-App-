@@ -3,6 +3,7 @@ using Chat.Application.Features.Post.Command.AddPost;
 using Chat.Application.Features.Post.Command.DeletePost;
 using Chat.Application.Features.Post.Command.UpdatePost;
 using Chat.Application.Features.Post.Query.GetAllPost;
+using Chat.Application.Features.Post.Query.GetPostById;
 
 namespace Chat.API.Controllers
 {
@@ -76,8 +77,17 @@ namespace Chat.API.Controllers
                 return Unauthorized(new ApiResponse(401, "Unauthorized: You are not authorized to update this post."));
             }
             return StatusCode(500, new ApiResponse(500));
-
         }
+
+        [HttpGet("Get-Post-By-Id")]
+        public async Task<ActionResult<ReturnPostDto?>> GetPostById(int Id)
+        {
+            var query = new GetPostByIdQuery(Id);
+            var response = await _mediator.Send(query);
+            if (response is not null) return Ok(new ApiResponse(200, response.ToString()));
+            return NotFound(new ApiResponse(404));
+        }
+
 
 
 

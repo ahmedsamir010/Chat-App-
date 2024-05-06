@@ -25,7 +25,12 @@ namespace Chat.Infrastructe.Repositories
             {
                 query = query.Include(include);
             }
-            return await query.FirstOrDefaultAsync(predicate);
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            return await query.FirstOrDefaultAsync();
         }
         public async Task<bool> AddAsync(T entity)
         {

@@ -30,9 +30,12 @@ namespace Chat.Application.Features.Post.Query.GetAllPost
 
                     if (mappedPosts.Any())
                     {
-                        foreach (var post in mappedPosts.Where(p => p.PictureUrl != null))
+                        foreach (var post in mappedPosts.Where(p => p?.PictureUrl != null))
                         {
-                            post!.PictureUrl = "https://localhost:7171/" + post.PictureUrl;
+                            if (post?.PictureUrl is not null)
+                            {
+                                post!.PictureUrl = "https://localhost:7171/" + post.PictureUrl;
+                            }
                         }
                     }
                     return mappedPosts;

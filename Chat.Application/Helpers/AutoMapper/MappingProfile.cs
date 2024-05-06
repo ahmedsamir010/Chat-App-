@@ -14,6 +14,9 @@ using Chat.Application.Helpers.Resolver;
 using Chat.Application.Features.Post.Command.AddPost;
 using Chat.Application.Features.Post.Query.GetAllPost;
 using Chat.Application.Features.Post.Command.UpdatePost;
+using Chat.Application.Features.Comment.Command.AddComment;
+using Chat.Application.Features.Comment.Query.GetComments;
+using Chat.Application.Features.Comment.Command.UpdateComment;
 
 namespace Chat.Application.Helpers.AutoMapper
 {
@@ -54,9 +57,16 @@ namespace Chat.Application.Helpers.AutoMapper
 
             CreateMap<Post, UpdatePostDto>().ReverseMap();
 
+            CreateMap<Comment, AddCommentDto>().ReverseMap();
 
+            CreateMap<Comment, CommentsDto>()
+                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                     .ForMember(dest => dest.ContentComment, opt => opt.MapFrom(src => src.ContentComment))
+                     .ForMember(dest => dest.PostId, opt => opt.MapFrom(src => src.Post.Id))
+                     .ForMember(dest => dest.PictureUrl, opt => opt.MapFrom(src => src.PictureUrl))
+                     .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
 
-
+            CreateMap<Comment, UpdateCommentDto>().ReverseMap();
 
 
 

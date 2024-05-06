@@ -1,15 +1,13 @@
-﻿using Chat.Domain.Common;
-
-namespace Chat.Domain.Entities
+﻿namespace Chat.Domain.Entities
 {
-    public class Post
+    public class Comment
     {
         public int Id { get; set; }
-        public string ContentPost { get; set; } = null!;
+        public string ContentComment { get; set; } = null!;
         public string? PictureUrl { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? ModifiedDate { get; set; }
         public AppUser User { get; set; } = null!;
-        public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+        public Post  Post { get; set; } = null!;
     }
 }

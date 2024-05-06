@@ -23,5 +23,7 @@ namespace Chat.Domain.Entities
         public ICollection<Message> MessageSend { get; set; } = new HashSet<Message>();  
         public ICollection<Message> MessageRecived { get; set; } = new HashSet<Message>();
         public ICollection<Post> Posts { get; set; } = new HashSet<Post>();
+        public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+
     }
 }
