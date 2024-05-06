@@ -16,17 +16,20 @@ namespace Chat.Infrastructe.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<UserLike>()
-                        .HasKey(x => new { x.SourceUserId, x.LikedUserId });
+                .HasKey(ul => new { ul.SourceUserId, ul.LikedUserId });
 
             modelBuilder.Entity<UserLike>()
-                        .HasOne(x => x.SourceUser)
-                        .WithMany(x => x.Likeduser)
-                        .HasForeignKey(x => x.SourceUserId);
+                .HasOne(ul => ul.SourceUser)
+                .WithMany(u => u.Likeduser)
+                .HasForeignKey(ul => ul.SourceUserId)
+                .OnDelete(DeleteBehavior.NoAction); // Adjust this behavior as needed
 
             modelBuilder.Entity<UserLike>()
-                        .HasOne(x => x.LikedUser)
-                        .WithMany(x => x.LikedByUser)
-                        .HasForeignKey(x => x.LikedUserId);
+                .HasOne(ul => ul.LikedUser)
+                .WithMany(u => u.LikedByUser)
+                .HasForeignKey(ul => ul.LikedUserId)
+                .OnDelete(DeleteBehavior.NoAction); // Adjust this behavior as needed
+
 
 
             //Message
@@ -68,6 +71,8 @@ namespace Chat.Infrastructe.Data
 
         public DbSet<Group> Groups { get; set; }
         public DbSet<connection> Connections { get; set; }
+        public DbSet<Post> Posts { get; set; }
+
 
     }
 

@@ -10,12 +10,13 @@ namespace Chat.Application.Response
     {
         public int Id { get; set; }
         public string Message { get; set; } = default!;
-        public object Data { get; set; }
+        public object Data { get; set; } = default!;
         public string PhotoUrl { get; set; } = default!;
         public List<string> Errors { get; set; } = default!;
         public bool Statues { get; set; }
         public bool IsSuccess { get; set; }
-        public ResponseStatus responseStatus { get; set; } 
+        public string  Token { get; set; } = default!;
+        public ResponseStatus ResponseStatus { get; set; } 
 
     }
     public enum ResponseStatus
@@ -24,7 +25,8 @@ namespace Chat.Application.Response
         Unauthorized,
         NotFound,
         BadRequest, 
-        NotActivate
+        NotActivate,
+        IsBlocked
     }
 
 }

@@ -9,6 +9,6 @@ namespace Chat.Application.Presistance.Contracts
 {
     public interface ITokenService
     {
-        Task<string> CreateAsync(AppUser appUser); 
+        Task<string> CreateTokenAsync(AppUser appUser); 
     }
 }

@@ -41,7 +41,7 @@ namespace Chat.Application.Features.Accounts.Command.ChangePassword
                     {
                         if (!await _userManager.IsEmailConfirmedAsync(user))
                         {
-                            response.responseStatus = ResponseStatus.NotActivate;
+                            response.ResponseStatus = ResponseStatus.NotActivate;
                             response.Message = "User is registered but the account is not activated.";
                             return response;
                         }
@@ -50,13 +50,13 @@ namespace Chat.Application.Features.Accounts.Command.ChangePassword
 
                         if (result.Succeeded)
                         {
-                            response.responseStatus = ResponseStatus.Success;
+                            response.ResponseStatus = ResponseStatus.Success;
                             response.Message = "Password has been changed.";
                             return response;
                         }
                         else
                         {
-                            response.responseStatus = ResponseStatus.BadRequest;
+                            response.ResponseStatus = ResponseStatus.BadRequest;
                             response.Message = "Failed to change the password ... Please Try again";
                             return response;
                            
@@ -64,7 +64,7 @@ namespace Chat.Application.Features.Accounts.Command.ChangePassword
                     }
                     else
                     {
-                        response.responseStatus = ResponseStatus.NotFound;
+                        response.ResponseStatus = ResponseStatus.NotFound;
                         response.Message = "User not found.";
                         return response;
                        
@@ -72,7 +72,7 @@ namespace Chat.Application.Features.Accounts.Command.ChangePassword
                 }
                 else
                 {
-                    response.responseStatus = ResponseStatus.Unauthorized;
+                    response.ResponseStatus = ResponseStatus.Unauthorized;
                     response.Message = "User claim not found.";
                     return response;
                   

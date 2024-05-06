@@ -41,14 +41,14 @@ namespace Chat.Application.Features.Like.Command
                 if (await _likeRepository.GetUserLike(currentUser!.Id, likedUser!.Id) != null)
                 {
                     response.Statues = false;
-                    response.Message = "You have already liked this user. Duplicate likes are not allowed.";
+                    response.Message = "You have already Followed this user. Duplicate follow are not allowed.";
                     return response;
                 }
 
                 await _likeRepository.AddLike(likedUser.Id.ToString(), currentUser.Id.ToString());
 
                 response.IsSuccess = true;
-                response.Message = $"Like added successfully. You now have a connection with {likedUser.UserName}.";
+                response.Message = $"Follow added successfully. You now have a connection with {likedUser.UserName}.";
                 return response;
             }
 

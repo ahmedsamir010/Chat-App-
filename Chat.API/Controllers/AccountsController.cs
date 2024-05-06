@@ -1,9 +1,4 @@
-﻿using Chat.Application.Features.Accounts.Command.ChangePassword;
-using Chat.Application.Features.Accounts.Command.UpdateFile;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-
-namespace Chat.API.Controllers
+﻿namespace Chat.API.Controllers
 {
     public class AccountsController(IMediator mediator) : BaseController(mediator)
     {
@@ -19,13 +14,15 @@ namespace Chat.API.Controllers
         {
             var command = new LoginCommand(loginDto);
             var response = await _mediator.Send(command);
-            return response.responseStatus switch
+            return response.ResponseStatus switch
             {
-                ResponseStatus.Success => Ok(response.Data),
+                ResponseStatus.Success => Ok(new { Token = response.Token,Message = response.Message }),
                 ResponseStatus.BadRequest => BadRequest(response.Message),
+                ResponseStatus.IsBlocked => BadRequest(response.Message),
                 ResponseStatus.NotActivate => StatusCode(403, new ApiResponse(403, response.Message)),
                 _ => NotFound(response.Message)
             };
+
         }
         /// <summary>
         /// Registers a new user with the provided registration data.
@@ -39,7 +36,7 @@ namespace Chat.API.Controllers
         {
             var command = new RegisterCommand(registerDto);
             var response = await _mediator.Send(command);
-            return response.responseStatus switch
+            return response.ResponseStatus switch
             {
                 ResponseStatus.Success => Ok(response.Data),
                 ResponseStatus.BadRequest => BadRequest(response.Errors),
@@ -77,13 +74,12 @@ namespace Chat.API.Controllers
         /// If the password change fails, returns HTTP 400 with an error message.
         /// </returns>
         [HttpPost("ChangePassword")]
-        [Authorize]
         public async Task<ActionResult<ApiResponse>> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
             var command = new ChangePasswordCommand(changePasswordDto);
             var response = await _mediator.Send(command);
 
-            return response.responseStatus switch
+            return response.ResponseStatus switch
             {
                 ResponseStatus.Success => Ok(new ApiResponse(200, response.Message)),
                 ResponseStatus.BadRequest => BadRequest(new ApiResponse(400, response.Message)),
@@ -93,8 +89,6 @@ namespace Chat.API.Controllers
                 _ => StatusCode(500, new ApiResponse(500, "Internal Server Error"))
             };
         }
-    
-
         /// <summary>
         /// Retrieves the details of the currently authenticated user.
         /// </summary>
@@ -133,14 +127,14 @@ namespace Chat.API.Controllers
         /// <returns>Returns a paginated list of users.</returns>
 
         [HttpGet("Get-All-Users")]
-        public async Task<ActionResult<MemberDto>> GetAllUsers([FromQuery] UserParams userParams,CancellationToken ct)
+        public async Task<ActionResult<MemberDto>> GetAllUsers([FromQuery] UserParams userParams, CancellationToken ct)
         {
             var users = await _mediator.Send(new GetUsersQuery(userParams), ct);
             if (users is null)
             {
                 return NotFound(new ApiResponse(404, "Not Found Users"));
             }
-            Response.AddPaginationHeaders(users.CurrentPage,users.TotalPages,users.TotalCount,users.PageSize);
+            Response.AddPaginationHeaders(users.CurrentPage, users.TotalPages, users.TotalCount, users.PageSize);
             return Ok(users);
         }
         /// <summary>
@@ -167,7 +161,7 @@ namespace Chat.API.Controllers
         public async Task<ActionResult<MemberDto>> GetUserByName(string userName, CancellationToken ct)
         {
             var user = await _mediator.Send(new GetUserByNameQuery(userName), ct);
-            if (user is null) return NotFound(new ApiResponse(404,"User Not Found"));
+            if (user is null) return NotFound(new ApiResponse(404, "User Not Found"));
             return Ok(user);
         }
 
@@ -253,7 +247,7 @@ namespace Chat.API.Controllers
         [HttpPut("Set-Main-Photo/{id}")]
         public async Task<IActionResult> SetMainPhoto(int id, CancellationToken ct)
         {
-           if(id > 0)
+            if (id > 0)
             {
                 var command = new SetMainPhotoCommand(id);
                 var response = await _mediator.Send(command, ct);
@@ -269,5 +263,36 @@ namespace Chat.API.Controllers
                 return NotFound("The id is not valid");
             }
         }
+
+        [Authorize(Roles ="Admin")]
+        [HttpPost("Block-Profile")]
+        public async Task<IActionResult> BlockProfile(BlockProfileDto deleteProfileDto)
+        {
+            var command = new BlockProfileCommand(deleteProfileDto);
+            var response = await _mediator.Send(command);
+
+            if (response.ResponseStatus == ResponseStatus.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpGet("Get-All-Blocked-Users")]
+        public async Task<ActionResult<IEnumerable<BlockedUsersDto>>> GetAllBlockedUsers()
+        {
+            var blockedUsers = await _mediator.Send(new GetBlockedUsersQuery());
+            if (blockedUsers == null || !blockedUsers.Any())
+            {
+                return NotFound(new ApiResponse(404, "No Blocked Users Found"));
+            }
+            return Ok(blockedUsers);
+        }
+
+
+
+
+
+
     }
 }

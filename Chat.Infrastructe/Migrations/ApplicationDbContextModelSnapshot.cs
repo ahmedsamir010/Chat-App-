@@ -66,6 +66,9 @@ namespace Chat.Infrastructe.Migrations
                     b.Property<string>("Introduction")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("IsBlocked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("KnownAs")
                         .HasColumnType("nvarchar(max)");
 
@@ -228,6 +231,37 @@ namespace Chat.Infrastructe.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Photos");
+                });
+
+            modelBuilder.Entity("Chat.Domain.Entities.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContentPost")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Chat.Domain.Entities.UserLike", b =>
@@ -451,18 +485,27 @@ namespace Chat.Infrastructe.Migrations
                     b.Navigation("appUser");
                 });
 
+            modelBuilder.Entity("Chat.Domain.Entities.Post", b =>
+                {
+                    b.HasOne("Chat.Domain.Entities.AppUser", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Chat.Domain.Entities.UserLike", b =>
                 {
                     b.HasOne("Chat.Domain.Entities.AppUser", "LikedUser")
                         .WithMany("LikedByUser")
                         .HasForeignKey("LikedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Chat.Domain.Entities.AppUser", "SourceUser")
                         .WithMany("Likeduser")
                         .HasForeignKey("SourceUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("LikedUser");
@@ -550,6 +593,8 @@ namespace Chat.Infrastructe.Migrations
                     b.Navigation("MessageSend");
 
                     b.Navigation("Photos");
+
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Chat.Domain.Entities.Group", b =>

@@ -9,7 +9,7 @@ namespace Chat.Infrastructe.Repositories
         private bool _disposed = false;
         private Dictionary<Type,object> _repositories=new Dictionary<Type,object>();
         public async Task<int> CompleteAsync() => await dbContext.SaveChangesAsync();
-        public IGenericRepository<TEntity> repository<TEntity>() where TEntity : BaseEntity
+        public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : class
         {
             var typeEntity=typeof(TEntity);
             if(!_repositories.TryGetValue(typeEntity,out var repository))

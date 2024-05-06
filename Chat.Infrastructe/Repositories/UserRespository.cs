@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Chat.Application.Features.Accounts.Query.GetAllBlockedUser;
 using Chat.Application.Features.Accounts.Query.GetAllUsers;
+using Chat.Application.Helpers.FileSettings;
 using Chat.Application.Helpers.Paginations;
 using Chat.Application.Presistance.Contracts;
 using Chat.Domain.Entities;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace Chat.Infrastructe.Repositories
@@ -79,7 +82,7 @@ namespace Chat.Infrastructe.Repositories
                     if (user is not null)
                     {
                         Photo photo = new();
-                        photo.Url = FileSettings.ManageFile.UploadPhoto(_webHost, file, pathName);
+                        photo.Url = ManageFile.UploadPhoto(_webHost, file, pathName);
                         photo.AppUserId = userIdClaim;
                         await _dbContext.AddAsync(photo);
                         await _dbContext.SaveChangesAsync();
@@ -97,7 +100,7 @@ namespace Chat.Infrastructe.Repositories
             {
                 _dbContext.Photos.Remove(currentPhoto);
                 await _dbContext.SaveChangesAsync();
-                FileSettings.ManageFile.RemovePhoto(_webHost, currentPhoto.Url);
+                ManageFile.RemovePhoto(_webHost, currentPhoto.Url);
                 return true;
             }
             return false;
@@ -142,7 +145,7 @@ namespace Chat.Infrastructe.Repositories
         {
             var currentUser = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                var user = await _userManager.FindByIdAsync(currentUser);
+            var user = await _userManager.FindByIdAsync(currentUser);
 
             var users = _dbContext.Users.Include(p => p.Photos).AsQueryable();
 
@@ -166,7 +169,7 @@ namespace Chat.Infrastructe.Repositories
             users = users.Where(u => u.DateOfBirth >= minDateOfBirth && u.DateOfBirth < maxDateOfBirth);
 
             // Exclude the current user from the list
-                users = users.Where(u => u.UserName != user!.UserName);
+            users = users.Where(u => u.UserName != user!.UserName);
 
             // Apply sorting based on the provided order
             users = userParams.OrderBy.ToLower() switch
@@ -183,10 +186,31 @@ namespace Chat.Infrastructe.Repositories
 
             return Pagination<MemberDto>.Create(memberDtos.AsQueryable(), pageNumber, userParams.PageSize);
         }
+        public async Task<bool> SoftDeleteUserAndLockout()
+        {
+            var userIdClaim = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim is not null)
+            {
+                var user = await _userManager.FindByIdAsync(userIdClaim);
+                if (user is not null)
+                {
+                    // Lock the user out before soft delete
+                    await _userManager.SetLockoutEnabledAsync(user, true);
 
+                    // Set lockout end date (optional duration)
+                    var lockoutEndDate = DateTimeOffset.UtcNow.AddMinutes(30); // Lockout for 30 minutes
+                    await _userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
 
+                    // Soft delete logic (replace with your desired implementation)
+                    // user.IsDeleted = true; // Assuming an IsDeleted property
+                    // await _userManager.UpdateAsync(user);
 
-
+                    // Return success if both operations are successful
+                    return true;
+                }
+            }
+            return false;
+        }
 
 
     }

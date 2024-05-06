@@ -36,28 +36,28 @@ namespace Chat.Application.Features.Accounts.Command.UpdateCurrentUser
                         {
                             response.Message = "User updated successfully.";
                             response.IsSuccess = true;
-                            response.responseStatus = ResponseStatus.Success;
+                            response.ResponseStatus = ResponseStatus.Success;
                         }
                         else
                         {
                             response.Message = "Failed to update user.";
                             response.Errors = result.Errors.Select(error => error.Description).ToList();
                             response.IsSuccess = false;
-                            response.responseStatus = ResponseStatus.BadRequest;
+                            response.ResponseStatus = ResponseStatus.BadRequest;
                         }
                     }
                     else
                     {
                         response.Message = "User not found.";
                         response.IsSuccess = false;
-                        response.responseStatus = ResponseStatus.NotFound;
+                        response.ResponseStatus = ResponseStatus.NotFound;
                     }
                 }
                 else
                 {
                     response.Message = "Please make sure you are authenticated.";
                     response.IsSuccess = false;
-                    response.responseStatus = ResponseStatus.Unauthorized;
+                    response.ResponseStatus = ResponseStatus.Unauthorized;
                 }
 
                 return response;

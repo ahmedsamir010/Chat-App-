@@ -28,7 +28,7 @@ namespace Chat.Application.Features.Accounts.Command.Register
                 BaseCommonResponse response = new();
                 if (!request._registerDto.Email.Contains("@"))
                 {
-                    response.responseStatus = ResponseStatus.BadRequest;
+                    response.ResponseStatus = ResponseStatus.BadRequest;
                     response.Message = "Invalid email address.";
                     return response;
                 }
@@ -37,7 +37,7 @@ namespace Chat.Application.Features.Accounts.Command.Register
 
                 if (existingUser is not null)
                 {
-                    response.responseStatus = ResponseStatus.BadRequest;
+                    response.ResponseStatus = ResponseStatus.BadRequest;
                     response.Message = "User with the same email already exists.";
                     return response;
                 }
@@ -45,14 +45,15 @@ namespace Chat.Application.Features.Accounts.Command.Register
                 var validateResult =await validator.ValidateAsync(request._registerDto);
                 if(!validateResult.IsValid) 
                 {
-                    response.responseStatus = ResponseStatus.BadRequest;
+                    response.ResponseStatus = ResponseStatus.BadRequest;
                     response.Errors = validateResult.Errors.Select(x => x.ErrorMessage).ToList();
                     return response;
                 }
                 var user = _mapper.Map<AppUser>(request._registerDto);
                 user.VerificationCode = random.Next(1000, 9999).ToString();
-                user.UserName = user.FirstName + " " + user.LastName;
+                user.UserName = user.FirstName + user.LastName;
                 var result = await _userManager.CreateAsync(user, request._registerDto.Password);
+                await _userManager.AddToRoleAsync(user, "User");    
                 if (result.Succeeded)
                 {
                     await SendConfirmationEmail(user);
@@ -67,7 +68,7 @@ namespace Chat.Application.Features.Accounts.Command.Register
                         //Token = _tokenService.CreateAsync(user).Result,
                         Gender=user.Gender
                     };
-                    response.responseStatus = ResponseStatus.Success;
+                    response.ResponseStatus = ResponseStatus.Success;
                 }
               
                 return response;

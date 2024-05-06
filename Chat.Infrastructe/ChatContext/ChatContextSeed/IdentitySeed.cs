@@ -4,7 +4,7 @@ namespace Chat.Infrastructe.ChatContext.ChatContextSeed
 {
     public class IdentitySeed
     {
-        public static async Task SeedUserAsync(UserManager<AppUser> userManager,RoleManager<IdentityRole> roleManager)
+        public static async Task SeedUserAsync(UserManager<AppUser> userManager)
         {
 
             if (!userManager.Users.Any())
@@ -12,47 +12,51 @@ namespace Chat.Infrastructe.ChatContext.ChatContextSeed
                 var user = new AppUser()
                 {
                     UserName = "AhmedSamir",
-                    FirstName="Ahmed",
-                    LastName="Samir",
+                    FirstName = "Ahmed",
+                    LastName = "Samir",
                     Email = "ahmed@gmail.com",
                     City = "Cairo",
                     Country = "Egypt",
                     DateOfBirth = new DateTime(2002, 7, 20),
                     KnownAs = "Abo Sakr",
-                    Gender="Male",
-                    Interests = "Programming, Reading" ,
+                    Gender = "Male",
+                    Interests = "Programming, Reading",
                     Introduction = "Hello, I'm a new user.",
                     LookingFor = "Looking for something...",
-                   
+                    EmailConfirmed=true,
                 };
 
-                var result = await userManager.CreateAsync(user, "Aa123456");
+                await userManager.CreateAsync(user, "123456");
+                await AddUserToRoleAsync(userManager, user.Id, "Admin");
 
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Admin");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        Console.WriteLine($"Error: {error.Description}");
-                    }
-                }
             }
 
-            if (!roleManager.Roles.Any())
-            {
-                var roles = new List<IdentityRole>()
-                {
-                    new IdentityRole(){ Name="Admin"},
-                    new IdentityRole(){ Name="Moderator"},
-                    new IdentityRole(){ Name="Menmber"}
-                };
-                foreach (var role in roles)
-                    await roleManager.CreateAsync(role);
-            }
-      
         }
+
+
+        public static async Task CreateRolesAsync(RoleManager<IdentityRole> roleManager)
+        {
+            if (!await roleManager.RoleExistsAsync("Admin"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+            if (!await roleManager.RoleExistsAsync("User"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("User"));
+            }
+
+        }
+        public static async Task AddUserToRoleAsync(UserManager<AppUser> userManager, string userId, string roleName)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                await userManager.AddToRoleAsync(user, roleName);
+            }
+        }
+
     }
+
+
+
 }

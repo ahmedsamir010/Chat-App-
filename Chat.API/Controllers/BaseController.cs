@@ -1,7 +1,7 @@
 ﻿namespace Chat.API.Controllers
 {
     [ServiceFilter(typeof(logUserActivity))]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     [Produces("application/json")]
     [Authorize] 

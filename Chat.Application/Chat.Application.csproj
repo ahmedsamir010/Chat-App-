@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Notification\**" />
+    <EmbeddedResource Remove="Features\Notification\**" />
+    <None Remove="Features\Notification\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
@@ -20,10 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chat.Domain\Chat.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Notification\Command\" />
   </ItemGroup>
 
 </Project>

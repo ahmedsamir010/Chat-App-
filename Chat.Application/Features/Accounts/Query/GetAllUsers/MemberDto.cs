@@ -11,7 +11,6 @@ namespace Chat.Application.Features.Accounts.Query.GetAllUsers
         public string LastName { get; set; } = string.Empty;
         public int Age { get; set; }
         public string PhotoUrl { get; set; } = string.Empty;
-        public string KnownAs { get; set; } = string.Empty;
         public DateTime LastActive { get; set; }
         public DateTime Created { get; set; }
         public string Gender { get; set; } = string.Empty;

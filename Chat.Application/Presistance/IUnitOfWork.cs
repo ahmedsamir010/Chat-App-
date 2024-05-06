@@ -10,7 +10,7 @@ namespace Chat.Application.Presistance
 {
     public interface IUnitOfWork : IAsyncDisposable
     {
-        IGenericRepository<TEntity> repository<TEntity>() where TEntity : BaseEntity;
+        IGenericRepository<TEntity> Repository<TEntity>() where TEntity : class;
         Task<int> CompleteAsync();
     }
 }

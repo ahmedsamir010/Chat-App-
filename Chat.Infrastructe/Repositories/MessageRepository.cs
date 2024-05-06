@@ -6,19 +6,22 @@ using Chat.Application.Helpers.PaginationsMessages;
 using Chat.Application.Presistance.Contracts;
 using Chat.Domain.Entities;
 using Chat.Infrastructe.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 namespace Chat.Infrastructe.Repositories
 {
     public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContext;
 
-
-        public MessageRepository(ApplicationDbContext dbContext,IMapper mapper) : base(dbContext)
+        public MessageRepository(ApplicationDbContext dbContext,IMapper mapper,IHttpContextAccessor httpContext) : base(dbContext)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _httpContext = httpContext;
         }
         public async Task<Group> GetGroupForConnection(string connectionId)
         {
@@ -54,17 +57,28 @@ namespace Chat.Infrastructe.Repositories
         }
         public async Task<Pagination<MessageDto>> GetUserMessagesAsync(UserMessagesParams userMessages)
         {
+            var userIdentity = _httpContext.HttpContext?.User?.Identity as ClaimsIdentity;
+            var userNameClaim = userIdentity?.FindFirst(ClaimTypes.Name);
+            var currentUserName = userNameClaim?.Value;
+
+            if (currentUserName == null)
+            {
+                throw new InvalidOperationException("Unable to retrieve current user name.");
+            }
+
             var query = _dbContext.Messages.OrderByDescending(x => x.MessageSend).AsQueryable();
 
-            query = userMessages.container.ToLower() switch
+            query = userMessages.container?.ToLower() switch
             {
-                "outbox" => query.Where(x => x.SenderUserName == userMessages.CurrentuserName),
-                "inbox" => query.Where(x => x.RecieptUserName == userMessages.CurrentuserName),
-                _ => query.Where(x => x.RecieptUserName == userMessages.CurrentuserName && x.DateRead == null),
+                "outbox" => query.Where(x => x.SenderUserName == currentUserName),
+                "inbox" => query.Where(x => x.RecieptUserName == currentUserName),
+                _ => query.Where(x => x.RecieptUserName == currentUserName && x.DateRead == null),
             };
+
             var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
-            return Pagination<MessageDto>.Create(messages,userMessages.PageNumber,userMessages.PageSize);
+            return Pagination<MessageDto>.Create(messages, userMessages.PageNumber, userMessages.PageSize);
         }
+
 
         public async Task<IEnumerable<MessageDto>> GetUserMessagesReadAsync(string currentUserName, string recipientUserName)
         {
@@ -89,7 +103,7 @@ namespace Chat.Infrastructe.Repositories
                 foreach (var message in unreadMessages)
                 {
                     message.DateRead = DateTime.UtcNow;
-                    //_dbContext.Messages.Update(message); // No need to update explicitly, context tracks changes.
+                    _dbContext.Messages.Update(message); // No need to update explicitly, context tracks changes.
                 }
                 await _dbContext.SaveChangesAsync();
             }

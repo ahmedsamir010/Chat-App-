@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Helpers;
+using Chat.Application.Presistance;
 using Chat.Application.Presistance.Contracts;
 using Chat.Domain.Entities;
 using Chat.Infrastructe.ChatContext.ChatContextSeed;
@@ -26,10 +27,10 @@ namespace Chat.Infrastructe.ExtensionMethods
             });
             // Configure
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddScoped(typeof(IMessageRepository), typeof(MessageRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRespository));
             services.AddScoped(typeof(ILikeRepository), typeof(LikeRepository));
-            services.AddScoped<IUserValidator<AppUser>, CustomUserValidator<AppUser>>();
             // Configure Token 
             services.AddScoped<ITokenService, TokenService>();
             // Config identity
@@ -40,10 +41,8 @@ namespace Chat.Infrastructe.ExtensionMethods
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             })
-
-                      .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders()
-                    .AddUserValidator<CustomUserValidator<AppUser>>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
             services.AddMemoryCache();
             services.AddAuthentication(option =>
             {
@@ -57,7 +56,7 @@ namespace Chat.Infrastructe.ExtensionMethods
                             ValidateIssuer = true,
                             ValidateAudience = false,
                             ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:Key"])),
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:Key"]!)),
                             ValidIssuer = configuration["Token:Issuer"],
                             NameClaimType = ClaimTypes.NameIdentifier,
 
@@ -78,24 +77,6 @@ namespace Chat.Infrastructe.ExtensionMethods
                     });
 
             return services;
-        }
-        public static async Task ConfigureMiddleWare(this IApplicationBuilder app)
-        {
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                await IdentitySeed.SeedUserAsync(userManager, roleManager);
-            }
-        }
-
-        public class CustomUserValidator<TUser> : IUserValidator<TUser> where TUser : class
-        {
-            public Task<IdentityResult> ValidateAsync(UserManager<TUser> manager, TUser user)
-            {
-                // This custom validator doesn't perform any validation, allowing duplicate usernames
-                return Task.FromResult(IdentityResult.Success);
-            }
         }
 
 

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
+
 namespace Chat.Domain.Entities
 {
     public class Message : BaseEntity
@@ -12,6 +14,7 @@ namespace Chat.Domain.Entities
         // Sender
         public string SenderId { get; set; } 
         public string SenderUserName { get; set; } = default!;
+
         public AppUser Sender { get; set; } = default!;
 
         // Recipent
@@ -26,8 +29,6 @@ namespace Chat.Domain.Entities
            
         public bool  SenderDeleted{ get; set; }
         public bool  RecipientDeleted{ get; set; }
-
-
 
     }
 }

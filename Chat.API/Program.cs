@@ -1,48 +1,16 @@
-
-using Chat.Infrastructe.ExtensionMethods;
-using Chat.Application.ExtensionMethods;
-using Microsoft.OpenApi.Models;
-using Chat.API.signalR;
-using System.Text.Json.Serialization;
-using Chat.API;
+using Chat.Domain.Entities;
+using Chat.Infrastructe.ChatContext.ChatContextSeed;
+using Chat.Infrastructe.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 services.AddControllers();
 services.AddLogging();
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen(setupAction =>
-{
-    setupAction.SwaggerDoc("v1", new OpenApiInfo { Title = "Chat App", Version = "v1" });
+SwaggerServicesExtention.AddSwaggerServices(builder.Services);
 
-    setupAction.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme",
-        Name = "Authorization",
-        Scheme = "Bearer",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-    });
-
-    setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] { }
-        }
-    });
-    // configure xml 
-    var xmlFile = "ChatApp.Api.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    setupAction.IncludeXmlComments(xmlPath);
-});
 
 // Configure Servivce 
 
@@ -57,17 +25,33 @@ services.AddSignalR().AddJsonProtocol(options =>
 // Configure Online Users 
 services.AddSingleton<PresenceTracker>();// Using Disctionry To Check Each User
 
-
-
-services.AddCors(options =>
+builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", builder =>
+    options.AddPolicy("CorsPolicy", policy =>
     {
-        builder.AllowAnyHeader().AllowCredentials().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200");
-
+        policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod().SetIsOriginAllowed(orjan => true);
     });
 });
+
 var app = builder.Build();
+using var scope = app.Services.CreateScope();
+var Services = scope.ServiceProvider;
+var loggerFactory = Services.GetRequiredService<ILoggerFactory>();
+try
+{
+    var identityContext = Services.GetRequiredService<ApplicationDbContext>();
+    await identityContext.Database.MigrateAsync();
+    var roleManager = Services.GetRequiredService<RoleManager<IdentityRole>>();
+    await IdentitySeed.CreateRolesAsync(roleManager);
+    var userManager = Services.GetRequiredService<UserManager<AppUser>>();
+    await IdentitySeed.SeedUserAsync(userManager);
+}
+catch (Exception ex)
+{
+    Log.Error(ex, ex.Message);
+}
+
+
 //if (app.Environment.IsDevelopment())
 //{
 app.UseSwagger();
@@ -82,5 +66,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<PresenceHub>(pattern: "hubs/presence");
 app.MapHub<MessageHub>(pattern: "hubs/message");
-ConfigurePresistanceService.ConfigureMiddleWare(app);
 app.Run();

@@ -31,10 +31,10 @@ namespace Chat.Application.Features.Accounts.Query.GetCurrentUser
                         return new UserDto
                         {
                             UserId = user.Id,
-                            Email = user.Email,
+                            Email = user.Email!,
                             FirstName = user.FirstName,
                             LastName = user.LastName,
-                            Token=await _tokenService.CreateAsync(user)
+                            Token=await _tokenService.CreateTokenAsync(user)
                         };
                     }
                     else
